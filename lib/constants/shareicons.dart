@@ -1,0 +1,1 @@
+List<String> shareicons=['instagramicon','telegramicon','facebookicon','twittericon','whatsappicon','facebookmessengericon','saveicon',];
