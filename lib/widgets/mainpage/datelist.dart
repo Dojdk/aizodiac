@@ -45,33 +45,36 @@ class _DateListState extends State<DateList> {
 
   @override
   Widget build(BuildContext context) {
+    double width = (MediaQuery.of(context).size.width - 144) / 16;
     return SizedBox(
-        width: double.infinity,
-        height: 90,
-        child: ScrollablePositionedList.builder(
-          itemScrollController: _itemcontroller,
-          addAutomaticKeepAlives: true,
-          // physics: const NeverScrollableScrollPhysics(),
-          scrollDirection: Axis.horizontal,
-          itemCount: days.length,
-          itemBuilder: (context, index) => GestureDetector(
-            onTap: () {
-              setState(() {
-                centerindex = index;
-              });
-              _itemcontroller.scrollTo(
-                  index: (index - 3) < 0 ? 0 : index - 3,
-                  duration: const Duration(milliseconds: 600));
-            },
-            child: Container(
-              padding: index == centerindex ? null : const EdgeInsets.all(10),
-              margin: const EdgeInsets.only(left: 8),
-              child: DateItem(
-                center: centerindex == index,
-                time: days[index],
-              ),
+      width: double.infinity,
+      height: 86,
+      child: ScrollablePositionedList.builder(
+        itemScrollController: _itemcontroller,
+        addAutomaticKeepAlives: true,
+        // physics: const NeverScrollableScrollPhysics(),
+        scrollDirection: Axis.horizontal,
+        itemCount: days.length,
+        itemBuilder: (context, index) => GestureDetector(
+          onTap: () {
+            setState(() {
+              centerindex = index;
+            });
+            _itemcontroller.scrollTo(
+                index: (index - 3) < 0 ? 0 : index - 3,
+                duration: const Duration(milliseconds: 600));
+          },
+          child: Container(
+            padding: index == centerindex
+                ? null
+                : EdgeInsets.all(width > 20 ? 20 : width),
+            child: DateItem(
+              center: centerindex == index,
+              time: days[index],
             ),
           ),
-        ));
+        ),
+      ),
+    );
   }
 }

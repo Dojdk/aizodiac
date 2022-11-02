@@ -17,7 +17,6 @@ class AiAnswer with ChangeNotifier {
           }));
       answer = jsonDecode(response.body)['answer'];
     } catch (error) {
-      print(error);
       rethrow;
     }
   }
