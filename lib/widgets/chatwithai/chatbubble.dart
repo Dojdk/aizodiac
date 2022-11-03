@@ -58,14 +58,9 @@ class _ChatBubbleState extends State<ChatBubble> {
                       decoration: BoxDecoration(
                           color: Colors.white,
                           borderRadius: BorderRadius.circular(8)),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            widget.message,
-                            style: Theme.of(context).textTheme.bodySmall,
-                          ),
-                        ],
+                      child: Text(
+                        widget.message,
+                        style: Theme.of(context).textTheme.bodySmall,
                       ),
                     ),
                   ],

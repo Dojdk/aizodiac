@@ -12,7 +12,8 @@ import '../widgets/chatwithai/chatbubble_me.dart';
 
 class ChatWithAiPage extends StatefulWidget {
   static const routename = '/chatwithaipage';
-  const ChatWithAiPage({super.key});
+  final String mytext;
+  const ChatWithAiPage({super.key, required this.mytext});
 
   @override
   State<ChatWithAiPage> createState() => _ChatWithAiPageState();
@@ -21,14 +22,12 @@ class ChatWithAiPage extends StatefulWidget {
 class _ChatWithAiPageState extends State<ChatWithAiPage> {
   bool _firsinit = true;
   bool _isLoading = false;
-  late String mytext;
   Future<void> reloadingScreen(BuildContext context) async {
-    mytext = ModalRoute.of(context)!.settings.arguments as String;
     setState(() {
       _isLoading = true;
     });
     try {
-      await Provider.of<AiAnswer>(context, listen: false).getData(text: mytext);
+      await Provider.of<AiAnswer>(context, listen: false).getData(text: '${widget.mytext} My zodiac sign is Leo!');
     } catch (error) {
       showDialog(
         context: context,
@@ -100,7 +99,7 @@ class _ChatWithAiPageState extends State<ChatWithAiPage> {
                 ),
                 Expanded(
                   child: ListView(children: [
-                    ChatBubbleMe(message: mytext, time: DateTime.now()),
+                    ChatBubbleMe(message: widget.mytext, time: DateTime.now()),
                     ChatBubble(
                         message: Provider.of<AiAnswer>(context, listen: false)
                             .aianswer,

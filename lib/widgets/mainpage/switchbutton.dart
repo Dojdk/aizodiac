@@ -37,7 +37,7 @@ class _CustomSwitchState extends State<CustomSwitch>
             begin: widget.value ? Alignment.topCenter : Alignment.bottomCenter,
             end: widget.value ? Alignment.bottomCenter : Alignment.topCenter)
         .animate(CurvedAnimation(
-            parent: _animationController, curve: Curves.linear));
+            parent: _animationController, curve: Curves.easeInCubic));
   }
 
   @override
@@ -60,17 +60,6 @@ class _CustomSwitchState extends State<CustomSwitch>
         builder: (context, child) {
           return GestureDetector(
             onVerticalDragDown: (DragDownDetails details) async {
-              if (!widget.value) null;
-              // if (_animationController.isCompleted) {
-              //   await _animationController.reverse();
-              // } else {
-              //   await _animationController.forward();
-              // }
-              await _animationController.forward();
-              widget.onTap();
-              _animationController.reverse();
-            },
-            onTap: () async {
               if (!widget.value) null;
               // if (_animationController.isCompleted) {
               //   await _animationController.reverse();

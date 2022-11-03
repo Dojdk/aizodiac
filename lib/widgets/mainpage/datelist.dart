@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 
-import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
-
 import '../mainpage/dateitem.dart';
 
 class DateList extends StatefulWidget {
@@ -13,16 +11,6 @@ class DateList extends StatefulWidget {
 }
 
 class _DateListState extends State<DateList> {
-  @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) =>
-        _itemcontroller.scrollTo(
-            index: centerindex - 3,
-            duration: const Duration(milliseconds: 600)));
-            widget.updatetime(days[centerindex-3]);
-  }
-
   final List<DateTime> days = [
     DateTime.now().subtract(const Duration(days: 7)),
     DateTime.now().subtract(const Duration(days: 6)),
@@ -41,48 +29,44 @@ class _DateListState extends State<DateList> {
     DateTime.now().add(const Duration(days: 7)),
   ];
 
-  final _itemcontroller = ItemScrollController();
+  final _controller = PageController(viewportFraction: 1 / 7, initialPage: 7);
 
-  late int centerindex = days.length ~/ 2;
+  late int centerindex = (days.length ~/ 2)+3;
 
   @override
   Widget build(BuildContext context) {
-    double width = (MediaQuery.of(context).size.width - 144) / 16;
-    double padding = width > 20 ? 20 : width;
     return SizedBox(
       width: double.infinity,
-      height: 73,
-      child: ScrollablePositionedList.builder(
-        itemScrollController: _itemcontroller,
-        addAutomaticKeepAlives: true,
-        // physics: const NeverScrollableScrollPhysics(),
-        scrollDirection: Axis.horizontal,
-        itemCount: days.length,
-        itemBuilder: (context, index) => GestureDetector(
-          onTap: () {
-            widget.updatetime(days[index]);
+      height: 80,
+      child: PageView.builder(
+          controller: _controller,
+          padEnds: false,
+          onPageChanged: (value) {
             setState(() {
-              centerindex = index;
+              centerindex = value + 3;
             });
-            _itemcontroller.scrollTo(
-                index: (index - 3) < 0 ? 0 : index - 3,
-                duration: const Duration(milliseconds: 600));
           },
-          child: Container(
-            padding: index == centerindex
-                ? null
-                : EdgeInsets.only(
-                    left: padding,
-                    top: 10,
-                    right: padding,
-                  ),
-            child: DateItem(
-              center: centerindex == index,
-              time: days[index],
-            ),
-          ),
-        ),
-      ),
+          scrollDirection: Axis.horizontal,
+          itemCount: days.length + 6,
+          itemBuilder: (context, index) {
+            if (index == 0 ||
+                index == 1 ||
+                index == 2 ||
+                index == 18 ||
+                index == 19 ||
+                index == 20) return const SizedBox();
+            return Container(
+              padding: index == centerindex
+                  ? null
+                  : const EdgeInsets.only(
+                      top: 10,
+                    ),
+              child: DateItem(
+                center: centerindex == index,
+                time: days[index - 3],
+              ),
+            );
+          }),
     );
   }
 }

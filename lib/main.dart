@@ -5,7 +5,6 @@ import 'package:provider/provider.dart';
 import 'providers/aianswer.dart';
 
 import 'pages/mainpage.dart';
-import 'pages/chatwithaipage.dart';
 
 import 'constants/colors.dart';
 
@@ -64,14 +63,14 @@ class MyApp extends StatelessWidget {
                 borderRadius: BorderRadius.circular(8.0),
               ),
               textStyle: const TextStyle(
-                  fontSize: 14, fontWeight: FontWeight.bold, color: Colors.white),
+                  fontSize: 14,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white),
             ),
           ),
         ),
         home: const MainPage(),
-        routes: {
-          ChatWithAiPage.routename: (context) => const ChatWithAiPage(),
-        },
+        routes: const {},
       ),
     );
   }

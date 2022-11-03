@@ -15,22 +15,18 @@ class MainAppBar extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        Builder(
-          builder: (BuildContext context) {
-            return GestureDetector(
-              onTap: () {
-                Navigator.of(context).push(_createRoute());
-              },
-              child: SizedBox(
-                height: 30,
-                width: 30,
-                child: SvgPicture.asset(
-                  'assets/icons/drawericon.svg',
-                  fit: BoxFit.fill,
-                ),
-              ),
-            );
+        GestureDetector(
+          onTap: () {
+            Navigator.of(context).push(_createRoute());
           },
+          child: SizedBox(
+            height: 30,
+            width: 30,
+            child: SvgPicture.asset(
+              'assets/icons/drawericon.svg',
+              fit: BoxFit.fill,
+            ),
+          ),
         ),
         RichText(
           text: TextSpan(
@@ -67,9 +63,10 @@ Route _createRoute() {
     pageBuilder: (context, animation, secondaryAnimation) => const DrawerPage(),
     transitionsBuilder: (context, animation, secondaryAnimation, child) =>
         SlideTransition(
-          
-      position: Tween<Offset>(begin: const Offset(-1, 0), end: Offset.zero)
-          .animate(animation,),
+      position:
+          Tween<Offset>(begin: const Offset(-1, 0), end: Offset.zero).animate(
+        animation,
+      ),
       child: const DrawerPage(),
     ),
   );

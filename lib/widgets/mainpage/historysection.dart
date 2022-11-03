@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_svg/flutter_svg.dart';
 
+import '../../pages/chatwithaipage.dart';
 import '../chatwithai/chatbubble.dart';
 import '../chatwithai/chatbubble_me.dart';
 
@@ -27,7 +28,10 @@ class HistorySection extends StatelessWidget {
               style: Theme.of(context).textTheme.headlineMedium,
             ),
             IconButton(
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.of(context)
+                      .push(_createRoute('What is Leo Love Horoscope for x'));
+                },
                 icon: SvgPicture.asset(
                   'assets/icons/upicon.svg',
                   height: 25,
@@ -39,12 +43,12 @@ class HistorySection extends StatelessWidget {
             if (index == 2)
               ChatBubbleMe(message: 'Hello', time: DateTime.now()),
             ChatBubble(
-                message: 'Some random text written buy AI',
+                message: 'Some random text written by AI',
                 time: DateTime.now()),
             if (index == 2)
               ChatBubbleMe(message: 'Hello', time: DateTime.now()),
             ChatBubble(
-                message: 'Some random text written buy AI',
+                message: 'Some random text written by AI',
                 time: DateTime.now()),
           ],
         ),
@@ -54,4 +58,23 @@ class HistorySection extends StatelessWidget {
       ],
     );
   }
+}
+
+Route _createRoute(String text) {
+  return PageRouteBuilder(
+    pageBuilder: (context, animation, secondaryAnimation) =>
+        ChatWithAiPage(mytext: text),
+    transitionsBuilder: (context, animation, secondaryAnimation, child) {
+      const begin = Offset(0.0, 1.0);
+      const end = Offset.zero;
+      const curve = Curves.ease;
+
+      var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+
+      return SlideTransition(
+        position: animation.drive(tween),
+        child: child,
+      );
+    },
+  );
 }

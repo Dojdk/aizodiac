@@ -28,14 +28,9 @@ class ChatBubbleMe extends StatelessWidget {
               constraints: const BoxConstraints(minWidth: 60, maxWidth: 200),
               decoration: BoxDecoration(
                   color: Colors.white, borderRadius: BorderRadius.circular(8)),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    message,
-                    style: Theme.of(context).textTheme.bodySmall,
-                  ),
-                ],
+              child: Text(
+                message,
+                style: Theme.of(context).textTheme.bodySmall,
               ),
             ),
           ],

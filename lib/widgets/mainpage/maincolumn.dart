@@ -94,12 +94,12 @@ class _MainColumnState extends State<MainColumn> {
               value: true,
               onTap: () {
                 if (index == 0) {
-                  Navigator.of(context).pushNamed(ChatWithAiPage.routename,
-                      arguments: 'What is Leo Horoscope for $time');
+                  Navigator.of(context)
+                      .push(_createRoute('What is Leo Horoscope for x'));
                 }
                 if (index == 1) {
-                  Navigator.of(context).pushNamed(ChatWithAiPage.routename,
-                      arguments: 'What is Leo love Horoscope for $time');
+                  Navigator.of(context)
+                      .push(_createRoute('What is Leo Love Horoscope for x'));
                 }
                 if (index == 2) {
                   if (textcontroller.text.isEmpty) {
@@ -107,9 +107,8 @@ class _MainColumnState extends State<MainColumn> {
                     return;
                   }
                   FocusScope.of(context).unfocus();
-                  Navigator.of(context).pushNamed(ChatWithAiPage.routename,
-                      arguments:
-                          '${textcontroller.text} My zodiac sign is Leo');
+                  Navigator.of(context).push(_createRoute(
+                      '${textcontroller.text} My zodiac sign is Leo'));
                   textcontroller.clear();
                 }
               },
@@ -148,4 +147,23 @@ class _MainColumnState extends State<MainColumn> {
       ),
     );
   }
+}
+
+
+Route _createRoute(String text) {
+  return PageRouteBuilder(
+    pageBuilder: (context, animation, secondaryAnimation) => ChatWithAiPage(mytext: text),
+    transitionsBuilder: (context, animation, secondaryAnimation, child) {
+      const begin = Offset(0.0, 1.0);
+      const end = Offset.zero;
+      const curve = Curves.ease;
+
+      var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+
+      return SlideTransition(
+        position: animation.drive(tween),
+        child: child,
+      );
+    },
+  );
 }
