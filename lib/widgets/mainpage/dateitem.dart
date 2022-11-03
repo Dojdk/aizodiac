@@ -33,7 +33,7 @@ class DateItem extends StatelessWidget {
           Text(
             '•',
             style: TextStyle(
-                fontSize: 20,
+                fontSize: 15,
                 fontWeight: center ? FontWeight.bold : FontWeight.normal,
                 color: center ? mainblue : maingrey),
           )

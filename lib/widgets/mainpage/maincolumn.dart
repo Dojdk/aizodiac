@@ -1,3 +1,5 @@
+import 'package:intl/intl.dart';
+
 import 'package:flutter/material.dart';
 
 import 'appbar.dart';
@@ -41,9 +43,16 @@ Future _showDialog(BuildContext ctx) => showDialog(
 
 class _MainColumnState extends State<MainColumn> {
   int index = 0;
+  bool showback = true;
   void _update(indextoggle) {
     index = indextoggle;
     setState(() {});
+  }
+
+  String time = DateFormat.yMMMMd().format(DateTime.now());
+  void _updatetime(DateTime datetime) {
+    showback = datetime.day > DateTime.now().day - 2;
+    time = DateFormat.yMMMMd().format(datetime).toString();
   }
 
   final textcontroller = TextEditingController();
@@ -69,7 +78,7 @@ class _MainColumnState extends State<MainColumn> {
             const SizedBox(
               height: 20,
             ),
-          if (index != 2) const DateList(),
+          if (index != 2) DateList(updatetime: _updatetime),
           Text(
             'mode *casual horoscope*\nCLASS_PERSONILIZED1\n{',
             style: Theme.of(context).textTheme.bodySmall,
@@ -81,9 +90,17 @@ class _MainColumnState extends State<MainColumn> {
             child: CustomSwitch(
               text: switchmap.keys.elementAt(index),
               color: switchmap.values.elementAt(index),
-              switchback: index == 2,
+              switchback: showback,
               value: true,
-              onChanged: (value) {
+              onTap: () {
+                if (index == 0) {
+                  Navigator.of(context).pushNamed(ChatWithAiPage.routename,
+                      arguments: 'What is Leo Horoscope for $time');
+                }
+                if (index == 1) {
+                  Navigator.of(context).pushNamed(ChatWithAiPage.routename,
+                      arguments: 'What is Leo love Horoscope for $time');
+                }
                 if (index == 2) {
                   if (textcontroller.text.isEmpty) {
                     _showDialog(context);
@@ -91,7 +108,8 @@ class _MainColumnState extends State<MainColumn> {
                   }
                   FocusScope.of(context).unfocus();
                   Navigator.of(context).pushNamed(ChatWithAiPage.routename,
-                      arguments: textcontroller.text);
+                      arguments:
+                          '${textcontroller.text} My zodiac sign is Leo');
                   textcontroller.clear();
                 }
               },

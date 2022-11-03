@@ -5,15 +5,15 @@ class CustomSwitch extends StatefulWidget {
   final Color color;
   final bool value;
   final bool switchback;
-  final ValueChanged<bool> onChanged;
+  final Function onTap;
 
   const CustomSwitch({
     Key? key,
     required this.value,
-    required this.onChanged,
     required this.switchback,
     required this.text,
     required this.color,
+    required this.onTap,
   }) : super(key: key);
 
   @override
@@ -59,35 +59,28 @@ class _CustomSwitchState extends State<CustomSwitch>
         animation: _animationController,
         builder: (context, child) {
           return GestureDetector(
-            onVerticalDragDown:!widget.value? null
-                : (DragDownDetails details) async {
-                    // if (_animationController.isCompleted) {
-                    //   await _animationController.reverse();
-                    // } else {
-                    //   await _animationController.forward();
-                    // }
-                    await _animationController.forward();
-
-                    widget.value == false
-                        ? widget.onChanged(true)
-                        : widget.onChanged(false);
-                    _animationController.reverse();
-                  }, 
-            onTap: !widget.value
-                ? null
-                : () async {
-                    // if (_animationController.isCompleted) {
-                    //   await _animationController.reverse();
-                    // } else {
-                    //   await _animationController.forward();
-                    // }
-                    await _animationController.forward();
-
-                    widget.value == false
-                        ? widget.onChanged(true)
-                        : widget.onChanged(false);
-                    _animationController.reverse();
-                  },
+            onVerticalDragDown: (DragDownDetails details) async {
+              if (!widget.value) null;
+              // if (_animationController.isCompleted) {
+              //   await _animationController.reverse();
+              // } else {
+              //   await _animationController.forward();
+              // }
+              await _animationController.forward();
+              widget.onTap();
+              _animationController.reverse();
+            },
+            onTap: () async {
+              if (!widget.value) null;
+              // if (_animationController.isCompleted) {
+              //   await _animationController.reverse();
+              // } else {
+              //   await _animationController.forward();
+              // }
+              await _animationController.forward();
+              widget.onTap();
+              _animationController.reverse();
+            },
             child: Container(
               height: height,
               width: width,
