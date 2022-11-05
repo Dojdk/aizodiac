@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import 'providers/messages.dart';
+import 'providers/index.dart';
 
 import 'pages/mainpage.dart';
 import 'pages/userprofile.dart';
@@ -23,6 +24,9 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(
           create: (context) => Messages(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) =>Index(),
         ),
       ],
       child: MaterialApp(

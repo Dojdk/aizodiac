@@ -29,12 +29,10 @@ class _ChatWithAiPageState extends State<ChatWithAiPage> {
       _isLoading = true;
     });
     try {
-      if (widget.mytext != 'Historykey6024973815123456789') {
-        Provider.of<Messages>(context, listen: false).addMessage(
-            text: widget.textToShow, isMe: true, time: DateTime.now());
-        await Provider.of<Messages>(context, listen: false)
-            .getAnswer(text: widget.mytext);
-      }
+      Provider.of<Messages>(context, listen: false).addMessage(
+          text: widget.textToShow, isMe: true, time: DateTime.now());
+      await Provider.of<Messages>(context, listen: false)
+          .getAnswer(text: widget.mytext);
     } catch (error) {
       showDialog(
         context: context,
@@ -76,9 +74,8 @@ class _ChatWithAiPageState extends State<ChatWithAiPage> {
 
   @override
   Widget build(BuildContext context) {
-    final providerMessage = widget.mytext == 'Historykey6024973815123456789'
-        ? Provider.of<Messages>(context, listen: false).messageshistorylist
-        : Provider.of<Messages>(context, listen: false).messages;
+    final providerMessage =
+        Provider.of<Messages>(context, listen: false).messageslist;
     return PageStartWithImage(
       imageurl: 'assets/images/backgroundimage.png',
       child: _isLoading

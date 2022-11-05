@@ -1,13 +1,15 @@
 import 'package:intl/intl.dart';
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import '../../providers/index.dart';
 
 import 'appbar.dart';
 import 'togglebutton.dart';
 import 'datelist.dart';
 import 'switchbutton.dart';
 import 'textfield.dart';
-import 'historysection.dart';
 
 import '../../constants/colors.dart';
 import '../../constants/switchmap.dart';
@@ -41,19 +43,14 @@ Future _showDialog(BuildContext ctx, String text) => showDialog(
     );
 
 class _MainColumnState extends State<MainColumn> {
-  int index = 0;
   bool showback = true;
   bool showbacksecond = true;
-  void _update(indextoggle) {
-    index = indextoggle;
-    setState(() {});
-  }
 
   String time = DateFormat.yMMMMd().format(DateTime.now());
+
   void _updatetime(DateTime datetime) {
-    showbacksecond = (datetime.day >= DateTime.now().day - 2 &&
-            datetime.day <= DateTime.now().day + 2) ||
-        index == 2;
+    showbacksecond = datetime.day >= DateTime.now().day - 2 &&
+        datetime.day <= DateTime.now().day + 2;
     time = DateFormat.yMMMMd().format(datetime).toString();
 
     if (showbacksecond != showback) {
@@ -70,96 +67,96 @@ class _MainColumnState extends State<MainColumn> {
   final textcontroller = TextEditingController();
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const SizedBox(
-            height: 10,
-          ),
-          const MainAppBar(),
-          const SizedBox(
-            height: 20,
-          ),
-          MainToggleButton(update: _update),
-          const SizedBox(
-            height: 20,
-          ),
-          if (index == 2) OwnTextField(controller: textcontroller),
-          if (index == 2)
-            const SizedBox(
-              height: 20,
-            ),
-          if (index != 2) DateList(updatetime: _updatetime),
-          Text(
-            'mode *casual horoscope*\nCLASS_PERSONILIZED1\n{',
-            style: Theme.of(context).textTheme.bodySmall,
-          ),
-          const SizedBox(
-            height: 30,
-          ),
-          Center(
-            child: CustomSwitch(
-              text: switchmap.keys.elementAt(index),
-              color: switchmap.values.elementAt(index),
-              switchback: showback,
-              value: true,
-              onTap: () {
-                if (index == 0) {
-                  Navigator.of(context).push(_createRoute(
-                      text: 'What is Leo Horoscope for $time',
-                      textToShow: 'What is UserName Horoscope for $time'));
-                }
-                if (index == 1) {
-                  Navigator.of(context).push(_createRoute(
-                      text: 'What is Leo Love Horoscope for $time',
-                      textToShow: 'What is UserName Love Horoscope for $time'));
-                }
-                if (index == 2) {
-                  if (textcontroller.text.isEmpty) {
-                    _showDialog(context, 'Please provide valid question.');
-                    return;
-                  }
-                  FocusScope.of(context).unfocus();
-                  Navigator.of(context).push(_createRoute(
-                      text: '${textcontroller.text} My zodiac sign is Leo',
-                      textToShow: textcontroller.text));
-                  textcontroller.clear();
-                }
-              },
-            ),
-          ),
-          const SizedBox(
-            height: 30,
-          ),
-          RichText(
-            text: TextSpan(
-              style: TextStyle(
-                color: maingrey,
-              ),
-              children: [
-                TextSpan(
-                    text: 'INSTRUCTIONS',
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodySmall!
-                        .copyWith(fontWeight: FontWeight.w700)),
-                TextSpan(
-                    text:
-                        ' “swipe down to request your personilized horoscope data collected and analysed by artificial intelligence info entered',
-                    style: Theme.of(context).textTheme.bodySmall),
-              ],
-            ),
-          ),
+    final providerIndex = Provider.of<Index>(context);
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const SizedBox(
+          height: 10,
+        ),
+        const MainAppBar(),
+        const SizedBox(
+          height: 20,
+        ),
+        MainToggleButton(func: _updatetime),
+        const SizedBox(
+          height: 20,
+        ),
+        if (providerIndex.indexnumber == 2)
+          OwnTextField(controller: textcontroller),
+        if (providerIndex.indexnumber == 2)
           const SizedBox(
             height: 20,
           ),
-          Text(
-              'name_ John Burbon\nbirth date_ 08/20/1994\nbirth time_ 9:00 pm\nbirth location_ USA',
-              style: Theme.of(context).textTheme.bodySmall),
-          HistorySection(index: index),
-        ],
-      ),
+        if (providerIndex.indexnumber != 2) DateList(updatetime: _updatetime),
+        Text(
+          'mode *casual horoscope*\nCLASS_PERSONILIZED1\n{',
+          style: Theme.of(context).textTheme.bodySmall,
+        ),
+        const SizedBox(
+          height: 30,
+        ),
+        Center(
+          child: CustomSwitch(
+            text: switchmap.keys.elementAt(providerIndex.indexnumber),
+            color: switchmap.values.elementAt(providerIndex.indexnumber),
+            switchback: showback || providerIndex.indexnumber == 2,
+            value: true,
+            onTap: () {
+              if (providerIndex.indexnumber == 0) {
+                Navigator.of(context).push(_createRoute(
+                    text: 'What is Leo Horoscope for $time',
+                    textToShow: 'What is UserName Horoscope for $time'));
+              }
+              if (providerIndex.indexnumber == 1) {
+                Navigator.of(context).push(_createRoute(
+                    text: 'What is Leo Love Horoscope for $time',
+                    textToShow: 'What is UserName Love Horoscope for $time'));
+              }
+              if (providerIndex.indexnumber == 2) {
+                if (textcontroller.text.isEmpty) {
+                  _showDialog(context, 'Please provide valid question.');
+                  return;
+                }
+                FocusScope.of(context).unfocus();
+                Navigator.of(context).push(_createRoute(
+                    text: '${textcontroller.text} My zodiac sign is Leo',
+                    textToShow: textcontroller.text));
+                textcontroller.clear();
+              }
+            },
+          ),
+        ),
+        const SizedBox(
+          height: 30,
+        ),
+        RichText(
+          text: TextSpan(
+            style: TextStyle(
+              color: maingrey,
+            ),
+            children: [
+              TextSpan(
+                  text: 'INSTRUCTIONS',
+                  style: Theme.of(context)
+                      .textTheme
+                      .bodySmall!
+                      .copyWith(fontWeight: FontWeight.w700)),
+              TextSpan(
+                  text:
+                      ' “swipe down to request your personilized horoscope data collected and analysed by artificial intelligence info entered',
+                  style: Theme.of(context).textTheme.bodySmall),
+            ],
+          ),
+        ),
+        const SizedBox(
+          height: 20,
+        ),
+        Text(
+            'name_ John Burbon\nbirth date_ 08/20/1994\nbirth time_ 9:00 pm\nbirth location_ USA',
+            style: Theme.of(context).textTheme.bodySmall),
+      ],
     );
   }
 }

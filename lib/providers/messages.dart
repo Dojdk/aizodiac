@@ -7,10 +7,8 @@ import 'package:http/http.dart' as http;
 import '../models/message.dart';
 
 class Messages with ChangeNotifier {
-  List<Message> messages = [];
-  List<Message> history = [
-    Message(
-        isMe: true, text: 'Some text written by user', time: DateTime.now()),
+  List<Message> _messages = [];
+  List<Message> _history = [
     Message(isMe: false, text: 'Some text written by AI', time: DateTime.now()),
     Message(
         isMe: true, text: 'Some text written by user', time: DateTime.now()),
@@ -18,17 +16,8 @@ class Messages with ChangeNotifier {
     Message(
         isMe: true, text: 'Some text written by user', time: DateTime.now()),
     Message(isMe: false, text: 'Some text written by AI', time: DateTime.now()),
-    Message(
-        isMe: true, text: 'Some text written by user', time: DateTime.now()),
-    Message(isMe: false, text: 'Some text written by AI', time: DateTime.now()),
-    Message(
-        isMe: true, text: 'Some text written by user', time: DateTime.now()),
-    Message(isMe: false, text: 'Some text written by AI', time: DateTime.now()),
-    Message(
-        isMe: true, text: 'Some text written by user', time: DateTime.now()),
-    Message(isMe: false, text: 'Some text written by AI', time: DateTime.now())
   ];
-
+  
   Future<void> getAnswer({required String text}) async {
     final url = Uri.parse('https://beast-ai-bot.herokuapp.com/jasper/question');
     try {
@@ -46,18 +35,27 @@ class Messages with ChangeNotifier {
 
   void addMessage(
       {required String text, required bool isMe, required DateTime time}) {
-    messages.add(Message(isMe: isMe, text: text, time: time));
+    _messages.add(Message(isMe: isMe, text: text, time: time));
   }
 
-  void clearMessages(){
-    messages=[];
+  void addMessageHist(
+      {required String text, required bool isMe, required DateTime time}) {
+    _history.add(Message(isMe: isMe, text: text, time: time));
+  }
+
+  void clearMessages() {
+    _messages = [];
+  }
+
+  void clearHistory() {
+    _history = [];
   }
 
   List get messageshistorylist {
-    return [...history];
+    return [..._history];
   }
 
   List get messageslist {
-    return [...messages];
+    return [..._messages];
   }
 }

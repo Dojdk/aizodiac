@@ -1,14 +1,20 @@
 import 'package:flutter/material.dart';
 
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:provider/provider.dart';
+
+import '../../providers/index.dart';
 
 import 'togglebuttonitem.dart';
 
 import '../../constants/colors.dart';
 
 class MainToggleButton extends StatefulWidget {
-  final Function update;
-  const MainToggleButton({super.key, required this.update});
+  final Function func;
+  const MainToggleButton({
+    super.key,
+    required this.func,
+  });
 
   @override
   State<MainToggleButton> createState() => _MainToggleButtonState();
@@ -43,9 +49,12 @@ class _MainToggleButtonState extends State<MainToggleButton> {
         onPressed: (index) {
           _selection = [false, false, false];
           setState(() {
+            Provider.of<Index>(context, listen: false).changeindex(index);
             _selection[index] = true;
-            widget.update(index);
           });
+          if (index == 2) {
+            widget.func(DateTime.now());
+          }
         },
         children: [
           ToggleButtonItem(
