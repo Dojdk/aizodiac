@@ -21,7 +21,7 @@ class MainColumn extends StatefulWidget {
   State<MainColumn> createState() => _MainColumnState();
 }
 
-Future _showDialog(BuildContext ctx) => showDialog(
+Future _showDialog(BuildContext ctx, String text) => showDialog(
       context: ctx,
       builder: (context) => AlertDialog(
         shape: const RoundedRectangleBorder(
@@ -29,8 +29,7 @@ Future _showDialog(BuildContext ctx) => showDialog(
             Radius.circular(32.0),
           ),
         ),
-        title: Text('Please provide valid question',
-            style: Theme.of(context).textTheme.bodyMedium),
+        title: Text(text, style: Theme.of(context).textTheme.bodyMedium),
         actions: [
           Center(
             child: ElevatedButton(
@@ -58,6 +57,10 @@ class _MainColumnState extends State<MainColumn> {
     time = DateFormat.yMMMMd().format(datetime).toString();
 
     if (showbacksecond != showback) {
+      if (showbacksecond == false) {
+        _showDialog(
+            context, 'Sorry,can\'t provide a horoscope for this time period.');
+      }
       setState(() {
         showback = showbacksecond;
       });
@@ -103,21 +106,24 @@ class _MainColumnState extends State<MainColumn> {
               value: true,
               onTap: () {
                 if (index == 0) {
-                  Navigator.of(context)
-                      .push(_createRoute('What is Leo Horoscope for $time'));
+                  Navigator.of(context).push(_createRoute(
+                      text: 'What is Leo Horoscope for $time',
+                      textToShow: 'What is UserName Horoscope for $time'));
                 }
                 if (index == 1) {
-                  Navigator.of(context).push(
-                      _createRoute('What is Leo Love Horoscope for $time'));
+                  Navigator.of(context).push(_createRoute(
+                      text: 'What is Leo Love Horoscope for $time',
+                      textToShow: 'What is UserName Love Horoscope for $time'));
                 }
                 if (index == 2) {
                   if (textcontroller.text.isEmpty) {
-                    _showDialog(context);
+                    _showDialog(context, 'Please provide valid question.');
                     return;
                   }
                   FocusScope.of(context).unfocus();
                   Navigator.of(context).push(_createRoute(
-                      '${textcontroller.text} My zodiac sign is Leo'));
+                      text: '${textcontroller.text} My zodiac sign is Leo',
+                      textToShow: textcontroller.text));
                   textcontroller.clear();
                 }
               },
@@ -158,10 +164,10 @@ class _MainColumnState extends State<MainColumn> {
   }
 }
 
-Route _createRoute(String text) {
+Route _createRoute({required String text, required String textToShow}) {
   return PageRouteBuilder(
     pageBuilder: (context, animation, secondaryAnimation) =>
-        ChatWithAiPage(mytext: text),
+        ChatWithAiPage(mytext: text, textToShow: textToShow),
     transitionsBuilder: (context, animation, secondaryAnimation, child) {
       const begin = Offset(0.0, 1.0);
       const end = Offset.zero;

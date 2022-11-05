@@ -13,7 +13,9 @@ import '../widgets/chatwithai/chatbubble.dart';
 class ChatWithAiPage extends StatefulWidget {
   static const routename = '/chatwithaipage';
   final String mytext;
-  const ChatWithAiPage({super.key, required this.mytext});
+  final String textToShow;
+  const ChatWithAiPage(
+      {super.key, required this.mytext, required this.textToShow});
 
   @override
   State<ChatWithAiPage> createState() => _ChatWithAiPageState();
@@ -28,10 +30,10 @@ class _ChatWithAiPageState extends State<ChatWithAiPage> {
     });
     try {
       if (widget.mytext != 'Historykey6024973815123456789') {
-        Provider.of<Messages>(context, listen: false)
-            .addMessage(text: widget.mytext, isMe: true, time: DateTime.now());
+        Provider.of<Messages>(context, listen: false).addMessage(
+            text: widget.textToShow, isMe: true, time: DateTime.now());
         await Provider.of<Messages>(context, listen: false)
-            .getAnswer(text: '${widget.mytext} My zodiac sign is Leo!');
+            .getAnswer(text: widget.mytext);
       }
     } catch (error) {
       showDialog(
@@ -110,32 +112,51 @@ class _ChatWithAiPageState extends State<ChatWithAiPage> {
                   height: 20,
                 ),
                 Expanded(
-                  child: ListView.builder(
-                    itemCount: providerMessage.length + 1,
-                    itemBuilder: (context, index) {
-                      if (index == providerMessage.length) {
-                        return Align(
-                          child: Center(
-                            child: ElevatedButton(
-                              onPressed: () {
-                                Provider.of<Messages>(context, listen: false)
-                                    .clearMessages();
-                                Navigator.of(context).pop();
-                              },
-                              child: const Text('Get more answers'),
-                            ),
-                          ),
-                        );
-                      }
-                      if (providerMessage[index].isMe) {
-                        return ChatBubbleMe(
+                  child: ShaderMask(
+                    shaderCallback: (Rect rect) {
+                      return const LinearGradient(
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                        colors: [Colors.transparent, Colors.purple],
+                        stops: [0.8, 1.0],
+                      ).createShader(rect);
+                    },
+                    blendMode: BlendMode.dstOut,
+                    child: ListView.builder(
+                      itemCount: providerMessage.length + 1,
+                      itemBuilder: (context, index) {
+                        if (index == providerMessage.length) {
+                          return Column(
+                            children: [
+                              Align(
+                                child: Center(
+                                  child: ElevatedButton(
+                                    onPressed: () {
+                                      Provider.of<Messages>(context,
+                                              listen: false)
+                                          .clearMessages();
+                                      Navigator.of(context).pop();
+                                    },
+                                    child: const Text('Get more answers'),
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(
+                                height: 100,
+                              )
+                            ],
+                          );
+                        }
+                        if (providerMessage[index].isMe) {
+                          return ChatBubbleMe(
+                              message: providerMessage[index].text,
+                              time: providerMessage[index].time);
+                        }
+                        return ChatBubble(
                             message: providerMessage[index].text,
                             time: providerMessage[index].time);
-                      }
-                      return ChatBubble(
-                          message: providerMessage[index].text,
-                          time: providerMessage[index].time);
-                    },
+                      },
+                    ),
                   ),
                 ),
               ],

@@ -62,8 +62,10 @@ class HistorySection extends StatelessWidget {
 
 Route _createRoute(String text) {
   return PageRouteBuilder(
-    pageBuilder: (context, animation, secondaryAnimation) =>
-        ChatWithAiPage(mytext: text),
+    pageBuilder: (context, animation, secondaryAnimation) => ChatWithAiPage(
+      mytext: text,
+      textToShow: '',
+    ),
     transitionsBuilder: (context, animation, secondaryAnimation, child) {
       const begin = Offset(0.0, 1.0);
       const end = Offset.zero;

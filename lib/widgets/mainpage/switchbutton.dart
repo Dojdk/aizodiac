@@ -42,70 +42,72 @@ class _CustomSwitchState extends State<CustomSwitch>
 
   @override
   Widget build(BuildContext context) {
-    return Stack(children: [
-      Container(
-          decoration: BoxDecoration(
-              border: widget.switchback ? null : Border.all(width: 1),
-              borderRadius: BorderRadius.circular(31)),
-          height: height,
-          width: width,
-          child: widget.switchback
-              ? Image.asset(
-                  'assets/images/switchback.png',
-                  fit: BoxFit.fill,
-                )
-              : null),
-      AnimatedBuilder(
-        animation: _animationController,
-        child: Container(
-          width: 60,
-          height: 60,
-          decoration: const BoxDecoration(
-            boxShadow: [
-              BoxShadow(
-                  color: Color(0x40000000),
-                  spreadRadius: 2,
-                  blurRadius: 2,
-                  offset: Offset(0, 3))
-            ],
-            shape: BoxShape.circle,
-            color: Colors.white,
-          ),
-          child: Center(
-            child: Text(
-              widget.text,
-              style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                    color: widget.color,
-                  ),
+    return Stack(
+      children: [
+        Container(
+            decoration: BoxDecoration(
+                border: widget.switchback ? null : Border.all(width: 1),
+                borderRadius: BorderRadius.circular(31)),
+            height: height,
+            width: width,
+            child: widget.switchback
+                ? Image.asset(
+                    'assets/images/switchback.png',
+                    fit: BoxFit.fill,
+                  )
+                : null),
+        AnimatedBuilder(
+          animation: _animationController,
+          child: Container(
+            width: 60,
+            height: 60,
+            decoration: const BoxDecoration(
+              boxShadow: [
+                BoxShadow(
+                    color: Color(0x40000000),
+                    spreadRadius: 2,
+                    blurRadius: 2,
+                    offset: Offset(0, 3))
+              ],
+              shape: BoxShape.circle,
+              color: Colors.white,
             ),
-          ),
-        ),
-        builder: (context, child) {
-          return GestureDetector(
-            onVerticalDragDown: (DragDownDetails details) async {
-              if (!widget.value) return;
-              if (!widget.switchback) return;
-              await _animationController.forward();
-              widget.onTap();
-              _animationController.reverse();
-            },
-            child: Container(
-              height: height,
-              width: width,
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(31.0), color: null),
-              child: Padding(
-                padding: const EdgeInsets.only(
-                    top: 4.0, bottom: 4.0, right: 4.0, left: 4.0),
-                child: Align(
-                  alignment: _circleAnimation.value,
-                  child: child,
-                ),
+            child: Center(
+              child: Text(
+                widget.text,
+                style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                      color: widget.color,
+                    ),
               ),
             ),
-          );
-        },
-      ),
-    ]);
+          ),
+          builder: (context, child) {
+            return GestureDetector(
+              onVerticalDragDown: (DragDownDetails details) async {
+                if (!widget.value) return;
+                if (!widget.switchback) return;
+                await _animationController.forward();
+                widget.onTap();
+                _animationController.reverse();
+              },
+              child: Container(
+                height: height,
+                width: width,
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(31.0), color: null),
+                child: Padding(
+                  padding: const EdgeInsets.only(
+                      top: 4.0, bottom: 4.0, right: 4.0, left: 4.0),
+                  child: Align(
+                    alignment: _circleAnimation.value,
+                    child: child,
+                  ),
+                ),
+              ),
+            );
+          },
+        ),
+      ],
+    );
   }
 }
