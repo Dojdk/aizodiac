@@ -31,7 +31,7 @@ class _DateListState extends State<DateList> {
 
   final _controller = PageController(viewportFraction: 1 / 7, initialPage: 7);
 
-  late int centerindex = (days.length ~/ 2)+3;
+  late int centerindex = (days.length ~/ 2) + 3;
 
   @override
   Widget build(BuildContext context) {
@@ -39,34 +39,36 @@ class _DateListState extends State<DateList> {
       width: double.infinity,
       height: 80,
       child: PageView.builder(
-          controller: _controller,
-          padEnds: false,
-          onPageChanged: (value) {
-            setState(() {
-              centerindex = value + 3;
-            });
-          },
-          scrollDirection: Axis.horizontal,
-          itemCount: days.length + 6,
-          itemBuilder: (context, index) {
-            if (index == 0 ||
-                index == 1 ||
-                index == 2 ||
-                index == 18 ||
-                index == 19 ||
-                index == 20) return const SizedBox();
-            return Container(
-              padding: index == centerindex
-                  ? null
-                  : const EdgeInsets.only(
-                      top: 10,
-                    ),
-              child: DateItem(
-                center: centerindex == index,
-                time: days[index - 3],
-              ),
-            );
-          }),
+        controller: _controller,
+        padEnds: false,
+        onPageChanged: (value) {
+          setState(() {
+            widget.updatetime(days[value]);
+            centerindex = value + 3;
+          });
+        },
+        scrollDirection: Axis.horizontal,
+        itemCount: days.length + 6,
+        itemBuilder: (context, index) {
+          if (index == 0 ||
+              index == 1 ||
+              index == 2 ||
+              index == 18 ||
+              index == 19 ||
+              index == 20) return const SizedBox();
+          return Container(
+            padding: index == centerindex
+                ? null
+                : const EdgeInsets.only(
+                    top: 10,
+                  ),
+            child: DateItem(
+              center: centerindex == index,
+              time: days[index - 3],
+            ),
+          );
+        },
+      ),
     );
   }
 }

@@ -44,6 +44,7 @@ Future _showDialog(BuildContext ctx) => showDialog(
 class _MainColumnState extends State<MainColumn> {
   int index = 0;
   bool showback = true;
+  bool showbacksecond = true;
   void _update(indextoggle) {
     index = indextoggle;
     setState(() {});
@@ -51,8 +52,16 @@ class _MainColumnState extends State<MainColumn> {
 
   String time = DateFormat.yMMMMd().format(DateTime.now());
   void _updatetime(DateTime datetime) {
-    showback = datetime.day > DateTime.now().day - 2;
+    showbacksecond = (datetime.day >= DateTime.now().day - 2 &&
+            datetime.day <= DateTime.now().day + 2) ||
+        index == 2;
     time = DateFormat.yMMMMd().format(datetime).toString();
+
+    if (showbacksecond != showback) {
+      setState(() {
+        showback = showbacksecond;
+      });
+    }
   }
 
   final textcontroller = TextEditingController();
@@ -95,11 +104,11 @@ class _MainColumnState extends State<MainColumn> {
               onTap: () {
                 if (index == 0) {
                   Navigator.of(context)
-                      .push(_createRoute('What is Leo Horoscope for x'));
+                      .push(_createRoute('What is Leo Horoscope for $time'));
                 }
                 if (index == 1) {
-                  Navigator.of(context)
-                      .push(_createRoute('What is Leo Love Horoscope for x'));
+                  Navigator.of(context).push(
+                      _createRoute('What is Leo Love Horoscope for $time'));
                 }
                 if (index == 2) {
                   if (textcontroller.text.isEmpty) {
@@ -149,10 +158,10 @@ class _MainColumnState extends State<MainColumn> {
   }
 }
 
-
 Route _createRoute(String text) {
   return PageRouteBuilder(
-    pageBuilder: (context, animation, secondaryAnimation) => ChatWithAiPage(mytext: text),
+    pageBuilder: (context, animation, secondaryAnimation) =>
+        ChatWithAiPage(mytext: text),
     transitionsBuilder: (context, animation, secondaryAnimation, child) {
       const begin = Offset(0.0, 1.0);
       const end = Offset.zero;

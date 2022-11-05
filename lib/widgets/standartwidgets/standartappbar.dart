@@ -21,11 +21,9 @@ class StandartAppBar extends StatelessWidget {
     return Row(
       mainAxisAlignment: alignment,
       children: [
-        IconButton(
-          padding: EdgeInsets.zero,
-          constraints: const BoxConstraints(),
-          onPressed: iconfunc,
-          icon: SizedBox(
+        GestureDetector(
+          onTap: iconfunc,
+          child: SizedBox(
             height: height,
             width: width,
             child: SvgPicture.asset(

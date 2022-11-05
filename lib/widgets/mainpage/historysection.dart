@@ -30,7 +30,7 @@ class HistorySection extends StatelessWidget {
             IconButton(
                 onPressed: () {
                   Navigator.of(context)
-                      .push(_createRoute('What is Leo Love Horoscope for x'));
+                      .push(_createRoute('Historykey6024973815123456789'));
                 },
                 icon: SvgPicture.asset(
                   'assets/icons/upicon.svg',

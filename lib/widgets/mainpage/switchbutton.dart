@@ -57,15 +57,34 @@ class _CustomSwitchState extends State<CustomSwitch>
               : null),
       AnimatedBuilder(
         animation: _animationController,
+        child: Container(
+          width: 60,
+          height: 60,
+          decoration: const BoxDecoration(
+            boxShadow: [
+              BoxShadow(
+                  color: Color(0x40000000),
+                  spreadRadius: 2,
+                  blurRadius: 2,
+                  offset: Offset(0, 3))
+            ],
+            shape: BoxShape.circle,
+            color: Colors.white,
+          ),
+          child: Center(
+            child: Text(
+              widget.text,
+              style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                    color: widget.color,
+                  ),
+            ),
+          ),
+        ),
         builder: (context, child) {
           return GestureDetector(
             onVerticalDragDown: (DragDownDetails details) async {
-              if (!widget.value) null;
-              // if (_animationController.isCompleted) {
-              //   await _animationController.reverse();
-              // } else {
-              //   await _animationController.forward();
-              // }
+              if (!widget.value) return;
+              if (!widget.switchback) return;
               await _animationController.forward();
               widget.onTap();
               _animationController.reverse();
@@ -80,29 +99,7 @@ class _CustomSwitchState extends State<CustomSwitch>
                     top: 4.0, bottom: 4.0, right: 4.0, left: 4.0),
                 child: Align(
                   alignment: _circleAnimation.value,
-                  child: Container(
-                    width: 60,
-                    height: 60,
-                    decoration: const BoxDecoration(
-                      boxShadow: [
-                        BoxShadow(
-                            color: Color(0x40000000),
-                            spreadRadius: 2,
-                            blurRadius: 2,
-                            offset: Offset(0, 3))
-                      ],
-                      shape: BoxShape.circle,
-                      color: Colors.white,
-                    ),
-                    child: Center(
-                      child: Text(
-                        widget.text,
-                        style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                              color: widget.color,
-                            ),
-                      ),
-                    ),
-                  ),
+                  child: child,
                 ),
               ),
             ),

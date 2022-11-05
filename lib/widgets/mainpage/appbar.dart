@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 import '../../pages/drawerpage.dart';
+import '../../pages/userprofile.dart';
 
 import '../../constants/colors.dart';
 
@@ -43,7 +44,9 @@ class MainAppBar extends StatelessWidget {
           ),
         ),
         GestureDetector(
-          onTap: () {},
+          onTap: () {
+            Navigator.of(context).pushNamed(UserProfileScreen.routename);
+          },
           child: SizedBox(
             height: 40,
             width: 40,

@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 
 import 'package:provider/provider.dart';
 
-import '../providers/aianswer.dart';
+import '../providers/messages.dart';
 
 import '../widgets/standartwidgets/standartpagestartwithimage.dart';
 import '../widgets/standartwidgets/standartappbar.dart';
 
-import '../widgets/chatwithai/chatbubble.dart';
 import '../widgets/chatwithai/chatbubble_me.dart';
+import '../widgets/chatwithai/chatbubble.dart';
 
 class ChatWithAiPage extends StatefulWidget {
   static const routename = '/chatwithaipage';
@@ -27,7 +27,12 @@ class _ChatWithAiPageState extends State<ChatWithAiPage> {
       _isLoading = true;
     });
     try {
-      await Provider.of<AiAnswer>(context, listen: false).getData(text: '${widget.mytext} My zodiac sign is Leo!');
+      if (widget.mytext != 'Historykey6024973815123456789') {
+        Provider.of<Messages>(context, listen: false)
+            .addMessage(text: widget.mytext, isMe: true, time: DateTime.now());
+        await Provider.of<Messages>(context, listen: false)
+            .getAnswer(text: '${widget.mytext} My zodiac sign is Leo!');
+      }
     } catch (error) {
       showDialog(
         context: context,
@@ -69,6 +74,9 @@ class _ChatWithAiPageState extends State<ChatWithAiPage> {
 
   @override
   Widget build(BuildContext context) {
+    final providerMessage = widget.mytext == 'Historykey6024973815123456789'
+        ? Provider.of<Messages>(context, listen: false).messageshistorylist
+        : Provider.of<Messages>(context, listen: false).messages;
     return PageStartWithImage(
       imageurl: 'assets/images/backgroundimage.png',
       child: _isLoading
@@ -83,7 +91,11 @@ class _ChatWithAiPageState extends State<ChatWithAiPage> {
                 ),
                 StandartAppBar(
                     iconname: 'closeicon',
-                    iconfunc: () => Navigator.of(context).pop(),
+                    iconfunc: () {
+                      Provider.of<Messages>(context, listen: false)
+                          .clearMessages();
+                      Navigator.of(context).pop();
+                    },
                     alignment: MainAxisAlignment.end,
                     height: 25,
                     width: 25),
@@ -98,21 +110,33 @@ class _ChatWithAiPageState extends State<ChatWithAiPage> {
                   height: 20,
                 ),
                 Expanded(
-                  child: ListView(children: [
-                    ChatBubbleMe(message: widget.mytext, time: DateTime.now()),
-                    ChatBubble(
-                        message: Provider.of<AiAnswer>(context, listen: false)
-                            .aianswer,
-                        time: DateTime.now()),
-                    Align(
-                      child: Center(
-                        child: ElevatedButton(
-                          onPressed: () => Navigator.of(context).pop(),
-                          child: const Text('Get more answers'),
-                        ),
-                      ),
-                    ),
-                  ]),
+                  child: ListView.builder(
+                    itemCount: providerMessage.length + 1,
+                    itemBuilder: (context, index) {
+                      if (index == providerMessage.length) {
+                        return Align(
+                          child: Center(
+                            child: ElevatedButton(
+                              onPressed: () {
+                                Provider.of<Messages>(context, listen: false)
+                                    .clearMessages();
+                                Navigator.of(context).pop();
+                              },
+                              child: const Text('Get more answers'),
+                            ),
+                          ),
+                        );
+                      }
+                      if (providerMessage[index].isMe) {
+                        return ChatBubbleMe(
+                            message: providerMessage[index].text,
+                            time: providerMessage[index].time);
+                      }
+                      return ChatBubble(
+                          message: providerMessage[index].text,
+                          time: providerMessage[index].time);
+                    },
+                  ),
                 ),
               ],
             ),
