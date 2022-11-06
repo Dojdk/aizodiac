@@ -3,15 +3,7 @@ import 'package:flutter/material.dart';
 import '../widgets/mainpage/maincolumn.dart';
 import '../widgets/mainpage/historysection.dart';
 
-import '../widgets/chatwithai/chatbubble.dart';
-import '../widgets/chatwithai/chatbubble_me.dart';
-
 import '../widgets/standartwidgets/standartpagestartwithimage.dart';
-
-import '../providers/messages.dart';
-
-import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
-import 'package:provider/provider.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({super.key});
@@ -21,72 +13,87 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> {
-  final ItemScrollController itemScrollController = ItemScrollController();
+  int _index = 0;
+  final _controller = PageController(
+    viewportFraction: 0.94,
+  );
+  late ScrollController _scrollController;
+  late ScrollController _scrollControllertwo;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _scrollController = ScrollController();
+    _scrollControllertwo = ScrollController();
+    _scrollController.addListener(swapPageListener);
+    _scrollControllertwo.addListener(swapPageListenertwo);
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _scrollController.dispose();
+    _controller.dispose();
+  }
+
+  void swapPageListener() {
+    if (_scrollController.offset >
+        _scrollController.position.maxScrollExtent + 50) {
+      if (_index == 0) {
+        _controller.animateToPage(
+            curve: Curves.ease, duration: const Duration(milliseconds: 600), 1);
+      }
+    }
+  }
+
+  void swapPageListenertwo() {
+    if (_scrollControllertwo.offset <
+        _scrollControllertwo.position.minScrollExtent - 50) {
+      if (_index == 1) {
+        _controller.animateToPage(
+            curve: Curves.ease, duration: const Duration(milliseconds: 600), 0);
+      }
+    }
+  }
+
+  // final ItemScrollController itemScrollController = ItemScrollController();
   void _scrolltohistory() {
-    itemScrollController.scrollTo(
-      alignment: .08,
-      index: 2,
-      duration: const Duration(milliseconds: 300),
-    );
+    _controller.animateToPage(
+        curve: Curves.ease, duration: const Duration(milliseconds: 600), 1);
   }
 
   void _scrollup() {
-    itemScrollController.scrollTo(
-      index: 0,
-      duration: const Duration(milliseconds: 300),
-    );
+    _controller.animateToPage(
+        curve: Curves.ease, duration: const Duration(milliseconds: 600), 0);
   }
 
-  late List<Widget> widgets = [
-    const MainColumn(),
-    HistorySection(
-      func: _scrolltohistory,
-    )
-  ];
   @override
   Widget build(BuildContext context) {
-    final providerMessage =
-        Provider.of<Messages>(context, listen: false).messageshistorylist;
     return PageStartWithImage(
       imageurl: 'assets/images/backgroundimage.png',
       child: Stack(
         fit: StackFit.expand,
         children: [
-          ScrollablePositionedList.builder(
-            // physics: const NeverScrollableScrollPhysics(),
-            itemScrollController: itemScrollController,
-            itemCount: providerMessage.length + 3,
-            itemBuilder: (context, index) {
-              if (index <= 1) {
-                return widgets[index];
-              }
-              if (index == providerMessage.length + 2) {
-                return Column(
-                  children: [
-                    Align(
-                      child: Center(
-                        child: ElevatedButton(
-                          onPressed: _scrollup,
-                          child: const Text('Get more answers'),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 100,
-                    )
-                  ],
-                );
-              }
-              if (providerMessage[index - 2].isMe) {
-                return ChatBubbleMe(
-                    message: providerMessage[index - 2].text,
-                    time: providerMessage[index - 2].time);
-              }
-              return ChatBubble(
-                  message: providerMessage[index - 2].text,
-                  time: providerMessage[index - 2].time);
+          PageView(
+            onPageChanged: (value) {
+              _index = value;
             },
-          ),
+            padEnds: false,
+            controller: _controller,
+            // physics: const NeverScrollableScrollPhysics(),
+            scrollDirection: Axis.vertical,
+            children: [
+              MainColumn(
+                scrollController: _scrollController,
+              ),
+              HistorySection(
+                scrollController: _scrollControllertwo,
+                scrollDown: _scrolltohistory,
+                scrollUp: _scrollup,
+              )
+            ],
+          )
         ],
       ),
     );

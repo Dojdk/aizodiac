@@ -16,8 +16,17 @@ class Messages with ChangeNotifier {
     Message(
         isMe: true, text: 'Some text written by user', time: DateTime.now()),
     Message(isMe: false, text: 'Some text written by AI', time: DateTime.now()),
+    Message(
+        isMe: true, text: 'Some text written by user', time: DateTime.now()),
+    Message(isMe: false, text: 'Some text written by AI', time: DateTime.now()),
+    Message(
+        isMe: true, text: 'Some text written by user', time: DateTime.now()),
+    Message(isMe: false, text: 'Some text written by AI', time: DateTime.now()),
+    Message(
+        isMe: true, text: 'Some text written by user', time: DateTime.now()),
+    Message(isMe: false, text: 'Some text written by AI', time: DateTime.now()),
   ];
-  
+
   Future<void> getAnswer({required String text}) async {
     final url = Uri.parse('https://beast-ai-bot.herokuapp.com/jasper/question');
     try {
