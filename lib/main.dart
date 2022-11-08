@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 
 import 'providers/messages.dart';
 import 'providers/index.dart';
+import 'providers/scollinchat.dart';
 
 import 'pages/mainpage.dart';
 import 'pages/userprofile.dart';
@@ -27,6 +28,9 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider(
           create: (context) =>Index(),
+        ),
+          ChangeNotifierProvider(
+          create: (context) =>ScrollInChat(),
         ),
       ],
       child: MaterialApp(

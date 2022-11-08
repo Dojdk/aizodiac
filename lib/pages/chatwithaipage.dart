@@ -3,12 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../providers/messages.dart';
+import '../providers/scollinchat.dart';
 
 import '../widgets/standartwidgets/standartpagestartwithimage.dart';
-import '../widgets/standartwidgets/standartappbar.dart';
 
 import '../widgets/chatwithai/chatbubble_me.dart';
 import '../widgets/chatwithai/chatbubble.dart';
+import '../widgets/chatwithai/appbar.dart';
 
 class ChatWithAiPage extends StatefulWidget {
   static const routename = '/chatwithaipage';
@@ -24,12 +25,14 @@ class ChatWithAiPage extends StatefulWidget {
 class _ChatWithAiPageState extends State<ChatWithAiPage> {
   bool _firsinit = true;
   bool _isLoading = false;
+  bool scrollStarted = false;
+
   Future<void> reloadingScreen(BuildContext context) async {
     setState(() {
       _isLoading = true;
     });
     try {
-      Provider.of<Messages>(context, listen: false).addMessage(
+      Provider.of<Messages>(context, listen: false).addQuestion(
           text: widget.textToShow, isMe: true, time: DateTime.now());
       await Provider.of<Messages>(context, listen: false)
           .getAnswer(text: widget.mytext);
@@ -85,53 +88,31 @@ class _ChatWithAiPageState extends State<ChatWithAiPage> {
           : Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const SizedBox(
-                  height: 10,
-                ),
-                StandartAppBar(
-                    iconname: 'closeicon',
-                    iconfunc: () {
-                      Provider.of<Messages>(context, listen: false)
-                          .clearMessages();
-                      Navigator.of(context).pop();
-                    },
-                    alignment: MainAxisAlignment.end,
-                    height: 25,
-                    width: 25),
-                const SizedBox(
-                  height: 20,
-                ),
-                Text(
-                  'HERE IS YOUR ANSWER !',
-                  style: Theme.of(context).textTheme.headlineLarge,
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
                 Expanded(
-                  child: ShaderMask(
-                    shaderCallback: (Rect rect) {
-                      return const LinearGradient(
-                        begin: Alignment.topCenter,
-                        end: Alignment.bottomCenter,
-                        colors: [Colors.transparent, Colors.purple],
-                        stops: [0.8, 1.0],
-                      ).createShader(rect);
+                  child: NotificationListener(
+                    onNotification: (notification) {
+                      if (!scrollStarted &&
+                          notification is ScrollUpdateNotification) {
+                        Provider.of<ScrollInChat>(context, listen: false)
+                            .changevalue(
+                                notification.dragDetails!.delta.direction);
+                        scrollStarted = true;
+                      }
+                      return true;
                     },
-                    blendMode: BlendMode.dstOut,
                     child: ListView.builder(
-                      itemCount: providerMessage.length + 1,
+                      itemCount: providerMessage.length + 2,
                       itemBuilder: (context, index) {
-                        if (index == providerMessage.length) {
+                        if (index == 0) {
+                          return const ChatAIAppBar();
+                        }
+                        if (index == providerMessage.length + 1) {
                           return Column(
                             children: [
                               Align(
                                 child: Center(
                                   child: ElevatedButton(
                                     onPressed: () {
-                                      Provider.of<Messages>(context,
-                                              listen: false)
-                                          .clearMessages();
                                       Navigator.of(context).pop();
                                     },
                                     child: const Text('Get more answers'),
@@ -144,14 +125,14 @@ class _ChatWithAiPageState extends State<ChatWithAiPage> {
                             ],
                           );
                         }
-                        if (providerMessage[index].isMe) {
+                        if (providerMessage[index - 1].isMe) {
                           return ChatBubbleMe(
-                              message: providerMessage[index].text,
-                              time: providerMessage[index].time);
+                              message: providerMessage[index - 1].text,
+                              time: providerMessage[index - 1].time);
                         }
                         return ChatBubble(
-                            message: providerMessage[index].text,
-                            time: providerMessage[index].time);
+                            message: providerMessage[index - 1].text,
+                            time: providerMessage[index - 1].time);
                       },
                     ),
                   ),

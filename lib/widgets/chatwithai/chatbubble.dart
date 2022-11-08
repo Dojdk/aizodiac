@@ -81,10 +81,9 @@ class _ChatBubbleState extends State<ChatBubble> {
                     .map((e) => ShareItem(func: () {}, iconurl: e))
                     .toList()),
           ),
-        if (tapped)
-          const SizedBox(
-            height: 10,
-          )
+        const SizedBox(
+          height: 10,
+        )
       ],
     );
   }

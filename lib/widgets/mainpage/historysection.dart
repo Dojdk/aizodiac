@@ -53,7 +53,7 @@ class HistorySection extends StatelessWidget {
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
                 colors: [Colors.transparent, Colors.purple],
-                stops: [0.8, 1.0],
+                stops: [0.7, 1.0],
               ).createShader(rect);
             },
             blendMode: BlendMode.dstOut,
