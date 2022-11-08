@@ -16,6 +16,7 @@ class ScrollInChat extends ChangeNotifier {
 
   void setToZero() {
     _value = 0;
+    _showAppBar=true;
     notifyListeners();
   }
 
