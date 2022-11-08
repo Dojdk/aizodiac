@@ -25,12 +25,18 @@ class _ChatAIAppBarState extends State<ChatAIAppBar> {
           height: 10,
         ),
         AnimatedOpacity(
-          opacity: provider.getvalue >= 0 ? 1 : 0,
+          opacity: provider.getshowappb? 1 : 0,
           duration: const Duration(milliseconds: 200),
           child: StandartAppBar(
               iconname: 'closeicon',
               iconfunc: () {
-                provider.getvalue >= 0 ? Navigator.of(context).pop() : null;
+                 provider.getshowappb
+                    ? {
+                        Navigator.of(context).pop(),
+                        Provider.of<ScrollInChat>(context, listen: false)
+                            .setToZero()
+                      }
+                    : null;
               },
               alignment: MainAxisAlignment.end,
               height: 25,

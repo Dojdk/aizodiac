@@ -79,6 +79,7 @@ class _ChatWithAiPageState extends State<ChatWithAiPage> {
   Widget build(BuildContext context) {
     final providerMessage =
         Provider.of<Messages>(context, listen: false).messageslist;
+    final providerScroll = Provider.of<ScrollInChat>(context, listen: false);
     return PageStartWithImage(
       imageurl: 'assets/images/backgroundimage.png',
       child: _isLoading
@@ -91,11 +92,18 @@ class _ChatWithAiPageState extends State<ChatWithAiPage> {
                 Expanded(
                   child: NotificationListener(
                     onNotification: (notification) {
+                      if (notification is ScrollEndNotification) {
+                        if (notification.metrics.pixels < 20) {
+                          providerScroll.changeShpwAppBar(true);
+                        } else {
+                          providerScroll.changeShpwAppBar(false);
+                        }
+                      }
                       if (!scrollStarted &&
                           notification is ScrollUpdateNotification) {
-                        Provider.of<ScrollInChat>(context, listen: false)
-                            .changevalue(
-                                notification.dragDetails!.delta.direction);
+                        providerScroll.changevalue(
+                            notification.dragDetails!.delta.direction);
+                        providerScroll.changeShpwAppBar(false);
                         scrollStarted = true;
                       }
                       return true;
@@ -113,6 +121,9 @@ class _ChatWithAiPageState extends State<ChatWithAiPage> {
                                 child: Center(
                                   child: ElevatedButton(
                                     onPressed: () {
+                                      Provider.of<ScrollInChat>(context,
+                                              listen: false)
+                                          .setToZero();
                                       Navigator.of(context).pop();
                                     },
                                     child: const Text('Get more answers'),
