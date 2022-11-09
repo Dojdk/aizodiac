@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 
 import 'providers/messages.dart';
 import 'providers/index.dart';
-import 'providers/scollinchat.dart';
+import 'providers/scrollinchat.dart';
 
 import 'pages/mainpage.dart';
 import 'pages/userprofile.dart';

@@ -51,7 +51,7 @@ class _MainColumnState extends State<MainColumn> {
   String time = DateFormat.yMMMMd().format(DateTime.now());
 
   void _updatetime(DateTime datetime) {
-    showbacksecond = datetime.day >= DateTime.now().day - 2 &&
+    showbacksecond = datetime.day >= DateTime.now().day &&
         datetime.day <= DateTime.now().day + 2;
     time = DateFormat.yMMMMd().format(datetime).toString();
 
@@ -161,6 +161,9 @@ class _MainColumnState extends State<MainColumn> {
           Text(
               'name_ John Burbon\nbirth date_ 08/20/1994\nbirth time_ 9:00 pm\nbirth location_ USA',
               style: Theme.of(context).textTheme.bodySmall),
+          const SizedBox(
+            height: 20,
+          ),
           const HistorySection(),
         ],
       ),

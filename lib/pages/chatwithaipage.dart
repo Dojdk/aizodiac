@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../providers/messages.dart';
-import '../providers/scollinchat.dart';
+import '../providers/scrollinchat.dart';
 
 import '../widgets/standartwidgets/standartpagestartwithimage.dart';
 
@@ -26,6 +26,7 @@ class _ChatWithAiPageState extends State<ChatWithAiPage> {
   bool _firsinit = true;
   bool _isLoading = false;
   bool scrollStarted = false;
+  bool scrollStarted2 = false;
 
   Future<void> reloadingScreen(BuildContext context) async {
     setState(() {
@@ -75,6 +76,10 @@ class _ChatWithAiPageState extends State<ChatWithAiPage> {
     super.didChangeDependencies();
   }
 
+  void setToZero() {
+    Provider.of<ScrollInChat>(context, listen: false).setToZero();
+  }
+
   @override
   Widget build(BuildContext context) {
     final providerMessage =
@@ -82,8 +87,8 @@ class _ChatWithAiPageState extends State<ChatWithAiPage> {
     final providerScroll = Provider.of<ScrollInChat>(context, listen: false);
     return WillPopScope(
       onWillPop: () async {
-        Provider.of<ScrollInChat>(context, listen: false).setToZero();
-      
+        setToZero();
+
         return true;
       },
       child: PageStartWithImage(
@@ -92,67 +97,70 @@ class _ChatWithAiPageState extends State<ChatWithAiPage> {
             ? const Center(
                 child: CircularProgressIndicator(),
               )
-            : Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Expanded(
-                    child: NotificationListener(
-                      onNotification: (notification) {
-                        if (notification is ScrollEndNotification) {
-                          if (notification.metrics.pixels < 20) {
-                            providerScroll.changeShpwAppBar(true);
-                          } else {
-                            providerScroll.changeShpwAppBar(false);
-                          }
-                        }
-                        if (!scrollStarted &&
-                            notification is ScrollUpdateNotification) {
-                          providerScroll.changevalue(
-                              notification.dragDetails!.delta.direction);
-                          providerScroll.changeShpwAppBar(false);
-                          scrollStarted = true;
-                        }
-                        return true;
-                      },
-                      child: ListView.builder(
-                        itemCount: providerMessage.length + 2,
-                        itemBuilder: (context, index) {
-                          if (index == 0) {
-                            return const ChatAIAppBar();
-                          }
-                          if (index == providerMessage.length + 1) {
-                            return Column(
-                              children: [
-                                Align(
-                                  child: Center(
-                                    child: ElevatedButton(
-                                      onPressed: () {
-                                        Provider.of<ScrollInChat>(context, listen: false).setToZero();
-                                        Navigator.of(context).pop();
-                                      },
-                                      child: const Text('Get more answers'),
-                                    ),
-                                  ),
-                                ),
-                                const SizedBox(
-                                  height: 100,
-                                )
-                              ],
-                            );
-                          }
-                          if (providerMessage[index - 1].isMe) {
-                            return ChatBubbleMe(
-                                message: providerMessage[index - 1].text,
-                                time: providerMessage[index - 1].time);
-                          }
-                          return ChatBubble(
-                              message: providerMessage[index - 1].text,
-                              time: providerMessage[index - 1].time);
-                        },
-                      ),
-                    ),
-                  ),
-                ],
+            : NotificationListener(
+                onNotification: (notification) {
+                  if (!scrollStarted2 &&
+                      notification is ScrollUpdateNotification) {
+                    if (notification.metrics.pixels + 100 < 0) {
+                      Navigator.of(context).pop();
+                      setToZero();
+                      scrollStarted2 = true;
+                    }
+                  }
+                  if (notification is ScrollEndNotification) {
+                    if (notification.metrics.pixels < 20) {
+                      providerScroll.changeShpwAppBar(true);
+                    } else {
+                      providerScroll.changeShpwAppBar(false);
+                    }
+                  }
+                  if (!scrollStarted &&
+                      notification is ScrollUpdateNotification) {
+                    providerScroll
+                        .changevalue(notification.dragDetails!.delta.direction);
+                    providerScroll.changeShpwAppBar(false);
+                    scrollStarted = true;
+                  }
+
+                  return true;
+                },
+                child: ListView.builder(
+                  physics: const BouncingScrollPhysics(),
+                  itemCount: providerMessage.length + 2,
+                  itemBuilder: (context, index) {
+                    if (index == 0) {
+                      return const ChatAIAppBar();
+                    }
+                    if (index == providerMessage.length + 1) {
+                      return Column(
+                        children: [
+                          Align(
+                            child: Center(
+                              child: ElevatedButton(
+                                onPressed: () {
+                                  setToZero();
+                                  Navigator.of(context).pop();
+                                },
+                                child: const Text('Get more answers'),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 100,
+                          )
+                        ],
+                      );
+                    }
+                    if (providerMessage[index - 1].isMe) {
+                      return ChatBubbleMe(
+                          message: providerMessage[index - 1].text,
+                          time: providerMessage[index - 1].time);
+                    }
+                    return ChatBubble(
+                        message: providerMessage[index - 1].text,
+                        time: providerMessage[index - 1].time);
+                  },
+                ),
               ),
       ),
     );

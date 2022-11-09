@@ -5,7 +5,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 
 import '../standartwidgets/standartappbar.dart';
 
-import '../../providers/scollinchat.dart';
+import '../../providers/scrollinchat.dart';
 
 class ChatAIAppBar extends StatefulWidget {
   const ChatAIAppBar({super.key});
@@ -46,6 +46,7 @@ class _ChatAIAppBarState extends State<ChatAIAppBar> {
           height: 50,
         ),
         Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
               provider.getvalue >= 0
@@ -53,18 +54,12 @@ class _ChatAIAppBarState extends State<ChatAIAppBar> {
                   : 'YOUR QUESTION HISTORY',
               style: Theme.of(context).textTheme.headlineLarge,
             ),
-            const SizedBox(
-              width: 20,
-            ),
             AnimatedOpacity(
               opacity: provider.getvalue < 0 ? 1 : 0,
               duration: const Duration(milliseconds: 200),
-              child: GestureDetector(
-                onTap: () => Navigator.of(context).pop(),
-                child: SvgPicture.asset(
-                  'assets/icons/downiconblue.svg',
-                  height: 20,
-                ),
+              child: SvgPicture.asset(
+                'assets/icons/downiconblue.svg',
+                height: 25,
               ),
             ),
           ],

@@ -3,26 +3,27 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../providers/messages.dart';
-import '../providers/scollinchat.dart';
 
 import '../widgets/standartwidgets/standartpagestartwithimage.dart';
 
 import '../widgets/chatwithai/chatbubble_me.dart';
 import '../widgets/chatwithai/chatbubble.dart';
-import '../widgets/chatwithai/appbar.dart';
+import '../widgets/history/appbar.dart';
 
-class HisrotyPage extends StatefulWidget {
+class HistoryPage extends StatefulWidget {
   static const routename = '/hisrotypage';
 
-  const HisrotyPage({
+  const HistoryPage({
     super.key,
   });
 
   @override
-  State<HisrotyPage> createState() => _HisrotyPage();
+  State<HistoryPage> createState() => _HisrotyPage();
 }
 
-class _HisrotyPage extends State<HisrotyPage> {
+class _HisrotyPage extends State<HistoryPage> {
+  bool scrollStarted = false;
+
   @override
   Widget build(BuildContext context) {
     final providerHistory =
@@ -43,40 +44,53 @@ class _HisrotyPage extends State<HisrotyPage> {
                 ).createShader(rect);
               },
               blendMode: BlendMode.dstOut,
-              child: ListView.builder(
-                itemCount: providerHistory.length + 2,
-                itemBuilder: (context, index) {
-                  if (index == 0) {
-                    return const ChatAIAppBar();
+              child: NotificationListener<ScrollUpdateNotification>(
+                onNotification: (notification) {
+                  if (!scrollStarted) {
+                    if (notification.metrics.pixels + 100 < 0) {
+                      Navigator.of(context).pop();
+
+                      scrollStarted = true;
+                    }
                   }
-                  if (index == providerHistory.length + 1) {
-                    return Column(
-                      children: [
-                        Align(
-                          child: Center(
-                            child: ElevatedButton(
-                              onPressed: () {
-                                Navigator.of(context).pop();
-                              },
-                              child: const Text('Get more answers'),
+                  return true;
+                },
+                child: ListView.builder(
+                  physics: const BouncingScrollPhysics(),
+                  itemCount: providerHistory.length + 2,
+                  itemBuilder: (context, index) {
+                    if (index == 0) {
+                      return const HistoryAppBar();
+                    }
+                    if (index == providerHistory.length + 1) {
+                      return Column(
+                        children: [
+                          Align(
+                            child: Center(
+                              child: ElevatedButton(
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                                child: const Text('Get more answers'),
+                              ),
                             ),
                           ),
-                        ),
-                        const SizedBox(
-                          height: 150,
-                        )
-                      ],
-                    );
-                  }
-                  if (providerHistory[index - 1].isMe) {
-                    return ChatBubbleMe(
+                          const SizedBox(
+                            height: 150,
+                          )
+                        ],
+                      );
+                    }
+                    if (providerHistory[index - 1].isMe) {
+                      return ChatBubbleMe(
+                          message: providerHistory[index - 1].text,
+                          time: providerHistory[index - 1].time);
+                    }
+                    return ChatBubble(
                         message: providerHistory[index - 1].text,
                         time: providerHistory[index - 1].time);
-                  }
-                  return ChatBubble(
-                      message: providerHistory[index - 1].text,
-                      time: providerHistory[index - 1].time);
-                },
+                  },
+                ),
               ),
             ),
           ),

@@ -6,7 +6,6 @@ import 'package:provider/provider.dart';
 import '../../providers/index.dart';
 import '../../providers/messages.dart';
 
-import '../chatwithai/chatbubble.dart';
 import '../chatwithai/chatbubble_me.dart';
 
 import '../../pages/historypage.dart';
@@ -51,20 +50,11 @@ class HistorySection extends StatelessWidget {
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,
               colors: [Colors.transparent, Colors.purple],
-              stops: [0.5, 1.0],
             ).createShader(rect);
           },
           blendMode: BlendMode.dstOut,
-          child: Column(
-            children: [
-              ChatBubbleMe(
-                  message: providerHistory[0].text,
-                  time: providerHistory[0].time),
-              ChatBubble(
-                  message: providerHistory[1].text,
-                  time: providerHistory[1].time),
-            ],
-          ),
+          child: ChatBubbleMe(
+              message: providerHistory[0].text, time: providerHistory[0].time),
         ),
       ],
     );
@@ -74,7 +64,7 @@ class HistorySection extends StatelessWidget {
 Route _createRoute() {
   return PageRouteBuilder(
     pageBuilder: (context, animation, secondaryAnimation) =>
-        const HisrotyPage(),
+        const HistoryPage(),
     transitionsBuilder: (context, animation, secondaryAnimation, child) {
       const begin = Offset(0.0, 1.0);
       const end = Offset.zero;
