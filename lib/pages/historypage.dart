@@ -76,7 +76,7 @@ class _HisrotyPage extends State<HistoryPage> {
                             ),
                           ),
                           const SizedBox(
-                            height: 150,
+                            height: 170,
                           )
                         ],
                       );

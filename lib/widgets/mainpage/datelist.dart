@@ -56,15 +56,22 @@ class _DateListState extends State<DateList> {
               index == 18 ||
               index == 19 ||
               index == 20) return const SizedBox();
-          return Container(
-            padding: index == centerindex
-                ? null
-                : const EdgeInsets.only(
-                    top: 10,
-                  ),
-            child: DateItem(
-              center: centerindex == index,
-              time: days[index - 3],
+          return GestureDetector(
+            onTap: () {
+              _controller.animateToPage(index - 3,
+                  duration: const Duration(milliseconds: 200),
+                  curve: Curves.ease);
+            },
+            child: Container(
+              padding: index == centerindex
+                  ? null
+                  : const EdgeInsets.only(
+                      top: 10,
+                    ),
+              child: DateItem(
+                center: centerindex == index,
+                time: days[index - 3],
+              ),
             ),
           );
         },

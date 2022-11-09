@@ -3,8 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-import '../standartwidgets/standartappbar.dart';
-
 import '../../providers/scrollinchat.dart';
 
 class ChatAIAppBar extends StatefulWidget {
@@ -24,27 +22,6 @@ class _ChatAIAppBarState extends State<ChatAIAppBar> {
         const SizedBox(
           height: 10,
         ),
-        AnimatedOpacity(
-          opacity: provider.getshowappb ? 1 : 0,
-          duration: const Duration(milliseconds: 200),
-          child: StandartAppBar(
-              iconname: 'closeicon',
-              iconfunc: () {
-                provider.getshowappb
-                    ? {
-                        Navigator.of(context).pop(),
-                        Provider.of<ScrollInChat>(context, listen: false)
-                            .setToZero()
-                      }
-                    : null;
-              },
-              alignment: MainAxisAlignment.end,
-              height: 25,
-              width: 25),
-        ),
-        const SizedBox(
-          height: 50,
-        ),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -54,9 +31,11 @@ class _ChatAIAppBarState extends State<ChatAIAppBar> {
                   : 'YOUR QUESTION HISTORY',
               style: Theme.of(context).textTheme.headlineLarge,
             ),
-            AnimatedOpacity(
-              opacity: provider.getvalue < 0 ? 1 : 0,
-              duration: const Duration(milliseconds: 200),
+            GestureDetector(
+              onTap: () {
+                Navigator.of(context).pop();
+                Provider.of<ScrollInChat>(context, listen: false).setToZero();
+              },
               child: SvgPicture.asset(
                 'assets/icons/downiconblue.svg',
                 height: 25,

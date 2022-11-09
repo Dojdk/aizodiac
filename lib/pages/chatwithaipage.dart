@@ -107,18 +107,11 @@ class _ChatWithAiPageState extends State<ChatWithAiPage> {
                       scrollStarted2 = true;
                     }
                   }
-                  if (notification is ScrollEndNotification) {
-                    if (notification.metrics.pixels < 20) {
-                      providerScroll.changeShpwAppBar(true);
-                    } else {
-                      providerScroll.changeShpwAppBar(false);
-                    }
-                  }
                   if (!scrollStarted &&
                       notification is ScrollUpdateNotification) {
                     providerScroll
                         .changevalue(notification.dragDetails!.delta.direction);
-                    providerScroll.changeShpwAppBar(false);
+                    
                     scrollStarted = true;
                   }
 
