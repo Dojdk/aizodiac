@@ -25,12 +25,12 @@ class _ChatAIAppBarState extends State<ChatAIAppBar> {
           height: 10,
         ),
         AnimatedOpacity(
-          opacity: provider.getshowappb? 1 : 0,
+          opacity: provider.getshowappb ? 1 : 0,
           duration: const Duration(milliseconds: 200),
           child: StandartAppBar(
               iconname: 'closeicon',
               iconfunc: () {
-                 provider.getshowappb
+                provider.getshowappb
                     ? {
                         Navigator.of(context).pop(),
                         Provider.of<ScrollInChat>(context, listen: false)
@@ -59,9 +59,12 @@ class _ChatAIAppBarState extends State<ChatAIAppBar> {
             AnimatedOpacity(
               opacity: provider.getvalue < 0 ? 1 : 0,
               duration: const Duration(milliseconds: 200),
-              child: SvgPicture.asset(
-                'assets/icons/downiconblue.svg',
-                height: 20,
+              child: GestureDetector(
+                onTap: () => Navigator.of(context).pop(),
+                child: SvgPicture.asset(
+                  'assets/icons/downiconblue.svg',
+                  height: 20,
+                ),
               ),
             ),
           ],

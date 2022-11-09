@@ -10,6 +10,7 @@ import 'togglebutton.dart';
 import 'datelist.dart';
 import 'switchbutton.dart';
 import 'textfield.dart';
+import 'historysection.dart';
 
 import '../../constants/colors.dart';
 import '../../constants/switchmap.dart';
@@ -108,16 +109,16 @@ class _MainColumnState extends State<MainColumn> {
               switchback: showback || providerIndex.indexnumber == 2,
               value: true,
               onTap: () {
-                if (providerIndex.indexnumber == 0) {
-                  Navigator.of(context).push(_createRoute(
-                      text: 'What is Leo Horoscope for $time',
-                      textToShow: 'What is UserName Horoscope for $time'));
-                }
-                if (providerIndex.indexnumber == 1) {
-                  Navigator.of(context).push(_createRoute(
-                      text: 'What is Leo Love Horoscope for $time',
-                      textToShow: 'What is UserName Love Horoscope for $time'));
-                }
+                // if (providerIndex.indexnumber == 0) {
+                //   Navigator.of(context).push(_createRoute(
+                //       text: 'What is Leo Horoscope for $time',
+                //       textToShow: 'What is UserName Horoscope for $time'));
+                // }
+                // if (providerIndex.indexnumber == 1) {
+                //   Navigator.of(context).push(_createRoute(
+                //       text: 'What is Leo Love Horoscope for $time',
+                //       textToShow: 'What is UserName Love Horoscope for $time'));
+                // }
                 if (providerIndex.indexnumber == 2) {
                   if (textcontroller.text.isEmpty) {
                     _showDialog(context, 'Please provide valid question.');
@@ -160,6 +161,7 @@ class _MainColumnState extends State<MainColumn> {
           Text(
               'name_ John Burbon\nbirth date_ 08/20/1994\nbirth time_ 9:00 pm\nbirth location_ USA',
               style: Theme.of(context).textTheme.bodySmall),
+          const HistorySection(),
         ],
       ),
     );

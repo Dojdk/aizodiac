@@ -80,76 +80,81 @@ class _ChatWithAiPageState extends State<ChatWithAiPage> {
     final providerMessage =
         Provider.of<Messages>(context, listen: false).messageslist;
     final providerScroll = Provider.of<ScrollInChat>(context, listen: false);
-    return PageStartWithImage(
-      imageurl: 'assets/images/backgroundimage.png',
-      child: _isLoading
-          ? const Center(
-              child: CircularProgressIndicator(),
-            )
-          : Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Expanded(
-                  child: NotificationListener(
-                    onNotification: (notification) {
-                      if (notification is ScrollEndNotification) {
-                        if (notification.metrics.pixels < 20) {
-                          providerScroll.changeShpwAppBar(true);
-                        } else {
+    return WillPopScope(
+      onWillPop: () async {
+        Provider.of<ScrollInChat>(context, listen: false).setToZero();
+      
+        return true;
+      },
+      child: PageStartWithImage(
+        imageurl: 'assets/images/backgroundimage.png',
+        child: _isLoading
+            ? const Center(
+                child: CircularProgressIndicator(),
+              )
+            : Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Expanded(
+                    child: NotificationListener(
+                      onNotification: (notification) {
+                        if (notification is ScrollEndNotification) {
+                          if (notification.metrics.pixels < 20) {
+                            providerScroll.changeShpwAppBar(true);
+                          } else {
+                            providerScroll.changeShpwAppBar(false);
+                          }
+                        }
+                        if (!scrollStarted &&
+                            notification is ScrollUpdateNotification) {
+                          providerScroll.changevalue(
+                              notification.dragDetails!.delta.direction);
                           providerScroll.changeShpwAppBar(false);
+                          scrollStarted = true;
                         }
-                      }
-                      if (!scrollStarted &&
-                          notification is ScrollUpdateNotification) {
-                        providerScroll.changevalue(
-                            notification.dragDetails!.delta.direction);
-                        providerScroll.changeShpwAppBar(false);
-                        scrollStarted = true;
-                      }
-                      return true;
-                    },
-                    child: ListView.builder(
-                      itemCount: providerMessage.length + 2,
-                      itemBuilder: (context, index) {
-                        if (index == 0) {
-                          return const ChatAIAppBar();
-                        }
-                        if (index == providerMessage.length + 1) {
-                          return Column(
-                            children: [
-                              Align(
-                                child: Center(
-                                  child: ElevatedButton(
-                                    onPressed: () {
-                                      Provider.of<ScrollInChat>(context,
-                                              listen: false)
-                                          .setToZero();
-                                      Navigator.of(context).pop();
-                                    },
-                                    child: const Text('Get more answers'),
+                        return true;
+                      },
+                      child: ListView.builder(
+                        itemCount: providerMessage.length + 2,
+                        itemBuilder: (context, index) {
+                          if (index == 0) {
+                            return const ChatAIAppBar();
+                          }
+                          if (index == providerMessage.length + 1) {
+                            return Column(
+                              children: [
+                                Align(
+                                  child: Center(
+                                    child: ElevatedButton(
+                                      onPressed: () {
+                                        Provider.of<ScrollInChat>(context, listen: false).setToZero();
+                                        Navigator.of(context).pop();
+                                      },
+                                      child: const Text('Get more answers'),
+                                    ),
                                   ),
                                 ),
-                              ),
-                              const SizedBox(
-                                height: 100,
-                              )
-                            ],
-                          );
-                        }
-                        if (providerMessage[index - 1].isMe) {
-                          return ChatBubbleMe(
+                                const SizedBox(
+                                  height: 100,
+                                )
+                              ],
+                            );
+                          }
+                          if (providerMessage[index - 1].isMe) {
+                            return ChatBubbleMe(
+                                message: providerMessage[index - 1].text,
+                                time: providerMessage[index - 1].time);
+                          }
+                          return ChatBubble(
                               message: providerMessage[index - 1].text,
                               time: providerMessage[index - 1].time);
-                        }
-                        return ChatBubble(
-                            message: providerMessage[index - 1].text,
-                            time: providerMessage[index - 1].time);
-                      },
+                        },
+                      ),
                     ),
                   ),
-                ),
-              ],
-            ),
+                ],
+              ),
+      ),
     );
   }
 }

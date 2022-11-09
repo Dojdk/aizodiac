@@ -9,21 +9,18 @@ import '../../providers/messages.dart';
 import '../chatwithai/chatbubble.dart';
 import '../chatwithai/chatbubble_me.dart';
 
+import '../../pages/historypage.dart';
+
 List<String> text = ['HOROSCOPE', 'LOVE', 'QUESTION'];
 
 class HistorySection extends StatelessWidget {
-  final ScrollController scrollController;
-  final VoidCallback scrollDown;
-  final VoidCallback scrollUp;
-  const HistorySection(
-      {super.key,
-      required this.scrollDown,
-      required this.scrollUp,
-      required this.scrollController});
+  const HistorySection({
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
-    final providerMessage =
+    final providerHistory =
         Provider.of<Messages>(context, listen: false).messageshistorylist;
     return Column(
       children: [
@@ -36,7 +33,9 @@ class HistorySection extends StatelessWidget {
               style: Theme.of(context).textTheme.headlineMedium,
             ),
             IconButton(
-                onPressed: scrollDown,
+                onPressed: () {
+                  Navigator.of(context).push(_createRoute());
+                },
                 icon: SvgPicture.asset(
                   'assets/icons/upicon.svg',
                   height: 25,
@@ -46,52 +45,47 @@ class HistorySection extends StatelessWidget {
         const SizedBox(
           height: 10,
         ),
-        Expanded(
-          child: ShaderMask(
-            shaderCallback: (Rect rect) {
-              return const LinearGradient(
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                colors: [Colors.transparent, Colors.purple],
-                stops: [0.7, 1.0],
-              ).createShader(rect);
-            },
-            blendMode: BlendMode.dstOut,
-            child: ListView.builder(
-              controller: scrollController,
-              physics: const BouncingScrollPhysics(),
-              itemCount: providerMessage.length + 1,
-              itemBuilder: (context, index) {
-                if (index == providerMessage.length) {
-                  return Column(
-                    children: [
-                      Align(
-                        child: Center(
-                          child: ElevatedButton(
-                            onPressed: scrollUp,
-                            child: const Text('Get more answers'),
-                          ),
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 100,
-                      )
-                    ],
-                  );
-                }
-                if (providerMessage[index].isMe) {
-                  return ChatBubbleMe(
-                      message: providerMessage[index].text,
-                      time: providerMessage[index].time);
-                }
-                return ChatBubble(
-                    message: providerMessage[index].text,
-                    time: providerMessage[index].time);
-              },
-            ),
+        ShaderMask(
+          shaderCallback: (Rect rect) {
+            return const LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: [Colors.transparent, Colors.purple],
+              stops: [0.5, 1.0],
+            ).createShader(rect);
+          },
+          blendMode: BlendMode.dstOut,
+          child: Column(
+            children: [
+              ChatBubbleMe(
+                  message: providerHistory[0].text,
+                  time: providerHistory[0].time),
+              ChatBubble(
+                  message: providerHistory[1].text,
+                  time: providerHistory[1].time),
+            ],
           ),
         ),
       ],
     );
   }
+}
+
+Route _createRoute() {
+  return PageRouteBuilder(
+    pageBuilder: (context, animation, secondaryAnimation) =>
+        const HisrotyPage(),
+    transitionsBuilder: (context, animation, secondaryAnimation, child) {
+      const begin = Offset(0.0, 1.0);
+      const end = Offset.zero;
+      const curve = Curves.ease;
+
+      var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+
+      return SlideTransition(
+        position: animation.drive(tween),
+        child: child,
+      );
+    },
+  );
 }
