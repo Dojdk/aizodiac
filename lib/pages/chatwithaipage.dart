@@ -52,11 +52,12 @@ class _ChatWithAiPageState extends State<ChatWithAiPage> {
           actions: [
             Center(
               child: ElevatedButton(
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                    Navigator.of(context).pop();
-                  },
-                  child: const Text('OK')),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                  Navigator.of(context).pop();
+                },
+                child: const Text('OK'),
+              ),
             )
           ],
         ),

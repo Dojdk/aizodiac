@@ -41,100 +41,99 @@ class MyApp extends StatelessWidget {
         title: 'AI Horoscope',
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
-            fontFamily: 'Consolas',
-            scaffoldBackgroundColor: Colors.white,
-            appBarTheme: const AppBarTheme(
-              foregroundColor: Color(0xff434F6D),
+          fontFamily: 'Consolas',
+          scaffoldBackgroundColor: Colors.white,
+          appBarTheme: const AppBarTheme(
+            foregroundColor: Color(0xff434F6D),
+          ),
+          brightness: Brightness.light,
+          textTheme: TextTheme(
+            displayLarge: TextStyle(color: maingrey),
+            displayMedium: TextStyle(color: maingrey),
+            displaySmall: TextStyle(color: maingrey),
+            headlineLarge: const TextStyle(
+              fontWeight: FontWeight.w700,
+              fontSize: 20,
             ),
-            brightness: Brightness.light,
-            textTheme: TextTheme(
-              displayLarge: TextStyle(color: maingrey),
-              displayMedium: TextStyle(color: maingrey),
-              displaySmall: TextStyle(color: maingrey),
-              headlineLarge: const TextStyle(
-                fontWeight: FontWeight.w700,
-                fontSize: 20,
-              ),
-              headlineMedium: const TextStyle(
-                fontSize: 20,
-              ),
-              bodyLarge: TextStyle(
-                fontWeight: FontWeight.w700,
-                fontSize: 16,
-                color: maingrey,
-              ),
-              bodyMedium: TextStyle(
-                fontSize: 16,
-                color: maingrey,
-              ),
-              bodySmall: TextStyle(
-                fontSize: 14,
-                color: maingrey,
-              ),
+            headlineMedium: const TextStyle(
+              fontSize: 20,
             ),
-            elevatedButtonTheme: ElevatedButtonThemeData(
-              style: ElevatedButton.styleFrom(
-                backgroundColor: mainpink,
-                elevation: 0,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8.0),
-                ),
-                textStyle: const TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white),
-              ),
+            bodyLarge: TextStyle(
+              fontWeight: FontWeight.w700,
+              fontSize: 16,
+              color: maingrey,
             ),
-            inputDecorationTheme: InputDecorationTheme(
-              contentPadding: const EdgeInsets.only(left: 10),
-              filled: true,
-              fillColor: transparentwhite,
-              labelStyle: TextStyle(color: maingrey),
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(18),
-                borderSide: BorderSide(
-                  color: transparentwhite,
-                  width: 2,
-                ),
+            bodyMedium: TextStyle(
+              fontSize: 16,
+              color: maingrey,
+            ),
+            bodySmall: TextStyle(
+              fontSize: 14,
+              color: maingrey,
+            ),
+          ),
+          elevatedButtonTheme: ElevatedButtonThemeData(
+            style: ElevatedButton.styleFrom(
+              backgroundColor: mainpink,
+              elevation: 0,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8.0),
               ),
-              focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(18),
-                borderSide: BorderSide(
-                  color: transparentwhite,
-                  width: 2,
-                ),
-              ),
-              errorBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(18),
-                borderSide: BorderSide(
-                  color: transparentwhite,
-                  width: 2,
-                ),
-              ),
-              enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(18),
-                borderSide: BorderSide(
-                  color: transparentwhite,
-                  width: 2,
-                ),
-              ),
-              disabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(18),
-                borderSide: BorderSide(
-                  color: transparentwhite,
-                  width: 2,
-                ),
-              ),
-              focusedErrorBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(18),
-                borderSide: BorderSide(
-                  color: transparentwhite,
-                  width: 2,
-                ),
+              textStyle: const TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white),
+            ),
+          ),
+          inputDecorationTheme: InputDecorationTheme(
+            contentPadding: const EdgeInsets.only(left: 10),
+            filled: true,
+            fillColor: transparentwhite,
+            labelStyle: TextStyle(color: maingrey),
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(18),
+              borderSide: BorderSide(
+                color: transparentwhite,
+                width: 2,
               ),
             ),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(18),
+              borderSide: BorderSide(
+                color: transparentwhite,
+                width: 2,
+              ),
             ),
-            
+            errorBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(18),
+              borderSide: BorderSide(
+                color: transparentwhite,
+                width: 2,
+              ),
+            ),
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(18),
+              borderSide: BorderSide(
+                color: transparentwhite,
+                width: 2,
+              ),
+            ),
+            disabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(18),
+              borderSide: BorderSide(
+                color: transparentwhite,
+                width: 2,
+              ),
+            ),
+            focusedErrorBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(18),
+              borderSide: BorderSide(
+                color: transparentwhite,
+                width: 2,
+              ),
+            ),
+          ),
+        ),
         home: const MainPage(),
         routes: {
           UserProfileScreen.routename: (context) => const UserProfileScreen()

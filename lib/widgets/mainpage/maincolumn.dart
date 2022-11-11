@@ -117,7 +117,8 @@ class _MainColumnState extends State<MainColumn> {
                   if (providerIndex.indexnumber == 0) {
                     Navigator.of(context).push(_createRoute(
                         text: 'What is Leo Horoscope for $time',
-                        textToShow: 'What is ${providerUser.name} Horoscope for $time'));
+                        textToShow:
+                            'What is ${providerUser.name} Horoscope for $time'));
                   }
                   if (providerIndex.indexnumber == 1) {
                     Navigator.of(context).push(_createRoute(

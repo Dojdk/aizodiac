@@ -40,7 +40,7 @@ class _MainToggleButtonState extends State<MainToggleButton> {
         borderRadius: const BorderRadius.all(Radius.circular(8)),
       ),
       child: ToggleButtons(
-        fillColor: null,
+        fillColor: Colors.white12,
         selectedColor: Colors.white,
         color: maingrey,
         borderRadius: const BorderRadius.all(Radius.circular(8)),

@@ -12,14 +12,11 @@ class OwnTextField extends StatelessWidget {
       height: 42,
       child: Form(
         child: TextFormField(
-            controller: controller,
-            textAlignVertical: const TextAlignVertical(y: .08),
-            maxLines: 1,
-            decoration: (const InputDecoration())
-                .applyDefaults(Theme.of(context).inputDecorationTheme)
-                .copyWith(
-                  hintText: hinttext,
-                )),
+          controller: controller,
+          textAlignVertical: const TextAlignVertical(y: .07),
+          maxLines: 1,
+          decoration: InputDecoration(hintText: hinttext),
+        ),
       ),
     );
   }

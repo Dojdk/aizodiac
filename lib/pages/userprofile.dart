@@ -9,6 +9,7 @@ import '../widgets/standartwidgets/standartappbar.dart';
 
 import '../widgets/userprofile/textfield.dart';
 import '../widgets/userprofile/timeshower.dart';
+import '../widgets/userprofile/togglebutton.dart';
 
 class UserProfileScreen extends StatefulWidget {
   static const routename = '/userprofilescreen';
@@ -149,12 +150,20 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
               children: [
                 TimeShower(
                     prefix: 'Hour',
-                    value: providerUser.birthdate.hour.toString()),
+                    value: providerUser.birthdate.hour > 12
+                        ? (providerUser.birthdate.hour - 12).toString()
+                        : providerUser.birthdate.hour.toString()),
                 TimeShower(
                     prefix: 'Minute',
                     value: providerUser.birthdate.minute.toString()),
                 Expanded(
-                    child: ToggleButtons(isSelected: const [], children: []))
+                  child: LayoutBuilder(
+                    builder:
+                        (BuildContext context, BoxConstraints constraints) {
+                      return UserToggleButton(width: constraints.maxWidth);
+                    },
+                  ),
+                ),
               ],
             ),
             Center(
