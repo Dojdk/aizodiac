@@ -33,10 +33,11 @@ class _ChatWithAiPageState extends State<ChatWithAiPage> {
       _isLoading = true;
     });
     try {
-      Provider.of<Messages>(context, listen: false).addQuestion(
-          text: widget.textToShow, isMe: true, time: DateTime.now());
       await Provider.of<Messages>(context, listen: false)
           .getAnswer(text: widget.mytext);
+      if (!mounted) return;
+      Provider.of<Messages>(context, listen: false).addMessageHist(
+          text: widget.textToShow, isMe: true, time: DateTime.now());
     } catch (error) {
       showDialog(
         context: context,
@@ -83,12 +84,11 @@ class _ChatWithAiPageState extends State<ChatWithAiPage> {
   @override
   Widget build(BuildContext context) {
     final providerMessage =
-        Provider.of<Messages>(context, listen: false).messageslist;
+        Provider.of<Messages>(context, listen: false).messageshistorylist;
     final providerScroll = Provider.of<ScrollInChat>(context, listen: false);
     return WillPopScope(
       onWillPop: () async {
         setToZero();
-
         return true;
       },
       child: PageStartWithImage(
@@ -111,7 +111,7 @@ class _ChatWithAiPageState extends State<ChatWithAiPage> {
                       notification is ScrollUpdateNotification) {
                     providerScroll
                         .changevalue(notification.dragDetails!.delta.direction);
-                    
+
                     scrollStarted = true;
                   }
 

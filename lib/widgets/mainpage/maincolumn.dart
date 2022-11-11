@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../providers/index.dart';
+import '../../providers/user.dart';
 
 import 'appbar.dart';
 import 'togglebutton.dart';
@@ -70,7 +71,8 @@ class _MainColumnState extends State<MainColumn> {
   @override
   Widget build(BuildContext context) {
     final providerIndex = Provider.of<Index>(context);
-
+    final providerUser =
+        Provider.of<UserProvider>(context, listen: false).getuser;
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
       child: SingleChildScrollView(
@@ -96,7 +98,8 @@ class _MainColumnState extends State<MainColumn> {
               const SizedBox(
                 height: 20,
               ),
-            if (providerIndex.indexnumber != 2) DateList(updatetime: _updatetime),
+            if (providerIndex.indexnumber != 2)
+              DateList(updatetime: _updatetime),
             Text(
               'mode *casual horoscope*\nCLASS_PERSONILIZED1\n{',
               style: Theme.of(context).textTheme.bodySmall,
@@ -111,16 +114,17 @@ class _MainColumnState extends State<MainColumn> {
                 switchback: showback || providerIndex.indexnumber == 2,
                 value: true,
                 onTap: () {
-                  // if (providerIndex.indexnumber == 0) {
-                  //   Navigator.of(context).push(_createRoute(
-                  //       text: 'What is Leo Horoscope for $time',
-                  //       textToShow: 'What is UserName Horoscope for $time'));
-                  // }
-                  // if (providerIndex.indexnumber == 1) {
-                  //   Navigator.of(context).push(_createRoute(
-                  //       text: 'What is Leo Love Horoscope for $time',
-                  //       textToShow: 'What is UserName Love Horoscope for $time'));
-                  // }
+                  if (providerIndex.indexnumber == 0) {
+                    Navigator.of(context).push(_createRoute(
+                        text: 'What is Leo Horoscope for $time',
+                        textToShow: 'What is ${providerUser.name} Horoscope for $time'));
+                  }
+                  if (providerIndex.indexnumber == 1) {
+                    Navigator.of(context).push(_createRoute(
+                        text: 'What is Leo Love Horoscope for $time',
+                        textToShow:
+                            'What is ${providerUser.name} Love Horoscope for $time'));
+                  }
                   if (providerIndex.indexnumber == 2) {
                     if (textcontroller.text.isEmpty) {
                       _showDialog(context, 'Please provide valid question.');
@@ -161,13 +165,12 @@ class _MainColumnState extends State<MainColumn> {
               height: 20,
             ),
             Text(
-                'name_ John Burbon\nbirth date_ 08/20/1994\nbirth time_ 9:00 pm\nbirth location_ USA',
+                'name_ ${providerUser.name} ${providerUser.surname}\nbirth date_ ${DateFormat.yMd().format(providerUser.birthdate)}\nbirth time_ ${DateFormat.jm().format(providerUser.birthdate)}\nbirth location_ USA',
                 style: Theme.of(context).textTheme.bodySmall),
             const SizedBox(
               height: 20,
             ),
             const HistorySection(),
-    
           ],
         ),
       ),

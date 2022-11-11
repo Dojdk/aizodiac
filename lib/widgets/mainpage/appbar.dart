@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:provider/provider.dart';
+
+import '../../providers/user.dart';
 
 import '../../pages/drawerpage.dart';
+import '../../pages/userprofile.dart';
 
 import '../../constants/colors.dart';
 
@@ -34,17 +38,18 @@ class MainAppBar extends StatelessWidget {
               fontSize: 20,
               color: maingrey,
             ),
-            children: const [
-              TextSpan(text: 'HELLO'),
+            children: [
+              const TextSpan(text: 'HELLO'),
               TextSpan(
-                  text: ',  JOHN',
-                  style: TextStyle(fontWeight: FontWeight.w700)),
+                  text:
+                      ',  ${(Provider.of<UserProvider>(context, listen: false).getuser.name).toUpperCase()}',
+                  style: const TextStyle(fontWeight: FontWeight.w700)),
             ],
           ),
         ),
         GestureDetector(
           onTap: () {
-            // Navigator.of(context).pushNamed(UserProfileScreen.routename);
+            Navigator.of(context).pushNamed(UserProfileScreen.routename);
           },
           child: SizedBox(
             height: 40,
