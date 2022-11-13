@@ -5,7 +5,7 @@ import '../models/user.dart';
 class UserProvider with ChangeNotifier {
   User _myUser = User(
     name: 'John',
-    surname: 'Burbon',
+    username: 'Burbon',
     email: 'john777@gmail.com',
     birthdate: DateTime(1994, 8, 20, 21),
   );
@@ -16,5 +16,6 @@ class UserProvider with ChangeNotifier {
 
   void updateUser(User newWalues) {
     _myUser = newWalues;
+    notifyListeners();
   }
 }

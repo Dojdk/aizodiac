@@ -32,19 +32,22 @@ class MainAppBar extends StatelessWidget {
             ),
           ),
         ),
-        RichText(
-          text: TextSpan(
-            style: TextStyle(
-              fontSize: 20,
-              color: maingrey,
+        Flexible(
+          child: RichText(
+            text: TextSpan(
+              style: TextStyle(
+                fontSize: 20,
+                color: maingrey,
+              ),
+              children: [
+                const TextSpan(text: 'HELLO'),
+                TextSpan(
+                    text: ',  ${(Provider.of<UserProvider>(
+                      context,
+                    ).getuser.name).toUpperCase()}',
+                    style: const TextStyle(fontWeight: FontWeight.w700)),
+              ],
             ),
-            children: [
-              const TextSpan(text: 'HELLO'),
-              TextSpan(
-                  text:
-                      ',  ${(Provider.of<UserProvider>(context, listen: false).getuser.name).toUpperCase()}',
-                  style: const TextStyle(fontWeight: FontWeight.w700)),
-            ],
           ),
         ),
         GestureDetector(

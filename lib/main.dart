@@ -9,6 +9,7 @@ import 'providers/user.dart';
 
 import 'pages/mainpage.dart';
 import 'pages/userprofile.dart';
+import 'pages/enterpage.dart';
 
 import 'constants/colors.dart';
 
@@ -71,6 +72,10 @@ class MyApp extends StatelessWidget {
               fontSize: 14,
               color: maingrey,
             ),
+            labelSmall: TextStyle(
+              fontSize: 12,
+              color: maingrey,
+            ),
           ),
           elevatedButtonTheme: ElevatedButtonThemeData(
             style: ElevatedButton.styleFrom(
@@ -80,7 +85,7 @@ class MyApp extends StatelessWidget {
                 borderRadius: BorderRadius.circular(8.0),
               ),
               textStyle: const TextStyle(
-                  fontSize: 14,
+                  fontSize: 16,
                   fontWeight: FontWeight.bold,
                   color: Colors.white),
             ),
@@ -134,7 +139,7 @@ class MyApp extends StatelessWidget {
             ),
           ),
         ),
-        home: const MainPage(),
+        home: const EnterPage(),
         routes: {
           UserProfileScreen.routename: (context) => const UserProfileScreen()
         },

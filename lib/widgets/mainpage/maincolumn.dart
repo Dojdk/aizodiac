@@ -71,8 +71,9 @@ class _MainColumnState extends State<MainColumn> {
   @override
   Widget build(BuildContext context) {
     final providerIndex = Provider.of<Index>(context);
-    final providerUser =
-        Provider.of<UserProvider>(context, listen: false).getuser;
+    final providerUser = Provider.of<UserProvider>(
+      context,
+    ).getuser;
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
       child: SingleChildScrollView(
@@ -166,7 +167,7 @@ class _MainColumnState extends State<MainColumn> {
               height: 20,
             ),
             Text(
-                'name_ ${providerUser.name} ${providerUser.surname}\nbirth date_ ${DateFormat.yMd().format(providerUser.birthdate)}\nbirth time_ ${DateFormat.jm().format(providerUser.birthdate)}\nbirth location_ USA',
+                'name_ ${providerUser.name} ${providerUser.username}\nbirth date_ ${DateFormat.yMd().format(providerUser.birthdate)}\nbirth time_ ${DateFormat.jm().format(providerUser.birthdate)}\nbirth location_ USA',
                 style: Theme.of(context).textTheme.bodySmall),
             const SizedBox(
               height: 20,
