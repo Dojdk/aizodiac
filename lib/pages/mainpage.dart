@@ -5,6 +5,7 @@ import '../widgets/mainpage/maincolumn.dart';
 import '../widgets/standartwidgets/standartpagestartwithimage.dart';
 
 class MainPage extends StatefulWidget {
+  static const routename='/mainpage';
   const MainPage({super.key});
 
   @override

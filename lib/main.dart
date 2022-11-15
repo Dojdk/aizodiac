@@ -141,6 +141,7 @@ class MyApp extends StatelessWidget {
         ),
         home: const EnterPage(),
         routes: {
+          MainPage.routename: (context) => const MainPage(),
           UserProfileScreen.routename: (context) => const UserProfileScreen()
         },
       ),
